@@ -2,35 +2,36 @@ import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-export default function ServicePage({ hero, includes, forWho, steps }) {
+export default function ServicePage({ hero, includes, forWho, steps, heroSlot }) {
   return (
     <div className="min-h-screen bg-white text-slate-800 overflow-x-hidden">
       <Navbar />
 
-      {/* Hero */}
-      <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-10 w-96 h-96 bg-sky-300 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-4xl mx-auto text-center relative">
-          <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 rounded-full px-4 py-2 mb-6 text-sm text-white font-medium">
-            {hero.badge}
+      {heroSlot ?? (
+        <section className="pt-32 pb-20 px-4 bg-gradient-to-br from-blue-600 via-blue-700 to-sky-600 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-72 h-72 bg-white rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-10 w-96 h-96 bg-sky-300 rounded-full blur-3xl" />
           </div>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-            {hero.title}
-          </h1>
-          <p className="text-blue-100 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-            {hero.subtitle}
-          </p>
-          <Link
-            to="/contatti"
-            className="inline-block bg-white text-blue-700 font-bold px-10 py-4 rounded-xl text-base hover:bg-blue-50 hover:shadow-xl transition-all hover:scale-105 shadow-lg"
-          >
-            Richiedi consulenza gratuita →
-          </Link>
-        </div>
-      </section>
+          <div className="max-w-4xl mx-auto text-center relative">
+            <div className="inline-flex items-center gap-2 bg-white/15 border border-white/25 rounded-full px-4 py-2 mb-6 text-sm text-white font-medium">
+              {hero.badge}
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
+              {hero.title}
+            </h1>
+            <p className="text-blue-100 text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
+              {hero.subtitle}
+            </p>
+            <Link
+              to="/contatti"
+              className="inline-block bg-white text-blue-700 font-bold px-10 py-4 rounded-xl text-base hover:bg-blue-50 hover:shadow-xl transition-all hover:scale-105 shadow-lg"
+            >
+              Richiedi consulenza gratuita →
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Cosa include */}
       <section className="py-24 px-4 bg-white">

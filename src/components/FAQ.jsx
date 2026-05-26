@@ -31,16 +31,16 @@ export default function FAQ() {
   const [open, setOpen] = useState(null)
 
   return (
-    <section className="py-24 px-4 bg-white">
+    <section className="py-20 px-5 md:px-12 lg:px-20 bg-white">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-14">
-          <div className="inline-flex items-center gap-2 text-sm text-blue-600 font-semibold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 text-[13px] text-blue-600 font-semibold uppercase tracking-[0.15em] mb-4">
             <span className="w-8 h-px bg-blue-400" />
             FAQ
             <span className="w-8 h-px bg-blue-400" />
           </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4">
+          <h2 className="text-[28px] sm:text-[36px] lg:text-[52px] font-extrabold text-slate-900 mb-4 leading-tight">
             Domande frequenti
           </h2>
           <p className="text-slate-500">Hai altre domande? <a href="#" className="text-blue-600 font-semibold hover:underline">Scrivici</a>, rispondiamo entro 24 ore.</p>
@@ -58,7 +58,7 @@ export default function FAQ() {
                 className="w-full flex items-center justify-between px-6 py-5 text-left"
                 onClick={() => setOpen(open === i ? null : i)}
               >
-                <span className="text-slate-800 font-semibold text-sm sm:text-base pr-4">{q}</span>
+                <span className="text-slate-800 font-semibold text-[15px] pr-4">{q}</span>
                 <div className={`w-7 h-7 rounded-lg shrink-0 flex items-center justify-center transition-all ${
                   open === i ? 'bg-blue-600 rotate-45' : 'bg-slate-100'
                 }`}>
@@ -69,7 +69,7 @@ export default function FAQ() {
               </button>
               {open === i && (
                 <div className="px-6 pb-6">
-                  <p className="text-slate-600 text-sm leading-relaxed">{a}</p>
+                  <p className="text-slate-600 text-[15px] leading-[1.7]">{a}</p>
                 </div>
               )}
             </div>

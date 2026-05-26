@@ -2,22 +2,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import Logos from './components/Logos'
-import HowWeWork from './components/HowWeWork'
 import UseCases from './components/UseCases'
-import Features from './components/Features'
-import Pricing from './components/Pricing'
-import WhyLearnUp from './components/WhyLearnUp'
-import Badges from './components/Badges'
-import GetStarted from './components/GetStarted'
-import FAQ from './components/FAQ'
-import PreFooterCTA from './components/PreFooterCTA'
-import TechStack from './components/TechStack'
-import ServicesGrid from './components/ServicesGrid'
-import WorkProcess from './components/WorkProcess'
-import StrengthPoints from './components/StrengthPoints'
-import FinalCTA from './components/FinalCTA'
-import ErrorBoundary from './components/ErrorBoundary'
-
+import CTAFaq from './components/CTAFaq'
+import WorkTimeline from './components/WorkTimeline'
+import ChiSono from './components/ChiSono'
 import Footer from './components/Footer'
 import ChatBot from './components/ChatBot'
 import ServiceElearning from './pages/ServiceElearning'
@@ -32,20 +20,10 @@ function HomePage() {
       <Navbar />
       <Hero />
       <Logos />
-      <HowWeWork />
+      <ChiSono />
       <UseCases />
-      <Features />
-      <Pricing />
-      <WhyLearnUp />
-      <Badges />
-      <GetStarted />
-      <FAQ />
-      <PreFooterCTA />
-      <TechStack />
-      <ServicesGrid />
-      <WorkProcess />
-      <StrengthPoints />
-      <FinalCTA />
+      <WorkTimeline />
+      <CTAFaq />
       
       <Footer />
       <ChatBot />

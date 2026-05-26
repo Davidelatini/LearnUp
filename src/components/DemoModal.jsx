@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react'
 
 const delay = (ms) => new Promise((r) => setTimeout(r, ms))
 
-// Swap with /videos/modulo1.mp4 … when Synthesia exports are ready
-const V = 'https://www.w3schools.com/html/mov_bbb.mp4'
+const SYNTHESIA_URL =
+  'https://share.synthesia.io/embeds/videos/5aa67159-8759-4e70-9c25-a2c37e3b2ae3'
 
 const MODULES = [
   {
@@ -14,8 +14,8 @@ const MODULES = [
     color: 'blue',
     title: 'Rischi sul lavoro',
     subtitle: 'Fisici, chimici, biologici, ergonomici',
-    videoSrc: V,
-    question: 'Ottimo! Iniziamo con una verifica: quali sono le 4 categorie principali di rischio sul lavoro che abbiamo appena visto?',
+    question:
+      'Ottimo! Iniziamo con una verifica: quali sono le 4 categorie principali di rischio sul lavoro che abbiamo appena visto?',
   },
   {
     id: 2,
@@ -23,8 +23,8 @@ const MODULES = [
     color: 'sky',
     title: 'Dispositivi di Protezione (DPI)',
     subtitle: 'Tipologie, obbligo e uso corretto',
-    videoSrc: V,
-    question: 'Perfetto! Ora dimmi: in quali situazioni è obbligatorio indossare il casco su un cantiere edile?',
+    question:
+      'Perfetto! Ora dimmi: in quali situazioni è obbligatorio indossare il casco su un cantiere edile?',
   },
   {
     id: 3,
@@ -32,8 +32,8 @@ const MODULES = [
     color: 'red',
     title: 'Procedure di emergenza',
     subtitle: 'Evacuazione, pronto soccorso, numeri utili',
-    videoSrc: V,
-    question: 'Bene! Sul tema emergenze: qual è il numero da chiamare in caso di infortunio grave sul lavoro in Italia?',
+    question:
+      'Bene! Sul tema emergenze: qual è il numero da chiamare in caso di infortunio grave sul lavoro in Italia?',
   },
   {
     id: 4,
@@ -41,8 +41,8 @@ const MODULES = [
     color: 'indigo',
     title: 'Ergonomia e postura',
     subtitle: 'Prevenzione disturbi muscolo-scheletrici',
-    videoSrc: V,
-    question: 'Quasi finito! Sull\'ergonomia: quali sono le 3 regole fondamentali per sollevare correttamente un carico pesante?',
+    question:
+      "Quasi finito! Sull'ergonomia: quali sono le 3 regole fondamentali per sollevare correttamente un carico pesante?",
   },
   {
     id: 5,
@@ -50,8 +50,8 @@ const MODULES = [
     color: 'violet',
     title: 'Stress lavoro-correlato',
     subtitle: 'Riconoscerlo, prevenirlo, gestirlo',
-    videoSrc: V,
-    question: 'Ultimo modulo! Sai dirmi: quali sono i principali segnali fisici che indicano un livello di stress lavoro-correlato elevato?',
+    question:
+      'Ultimo modulo! Sai dirmi: quali sono i principali segnali fisici che indicano un livello di stress lavoro-correlato elevato?',
   },
 ]
 
@@ -62,6 +62,24 @@ const COLOR_MAP = {
   indigo: 'bg-indigo-50 text-indigo-600 border-indigo-200',
   violet: 'bg-violet-50 text-violet-600 border-violet-200',
 }
+
+const CONFETTI_COLORS = ['#2563EB', '#0EA5E9', '#38BDF8', '#f59e0b', '#10b981', '#f472b6', '#a855f7', '#ef4444']
+const CONFETTI_PARTICLES = Array.from({ length: 40 }, (_, i) => {
+  const jitter = ((i * 37) % 100) / 100
+  const delay = ((i * 19) % 100) / 40
+  const duration = 2.8 + (((i * 23) % 100) / 50)
+  const size = 5 + ((i * 11) % 10)
+
+  return {
+    id: i,
+    left: `${(i / 40) * 100 + (jitter * 4 - 2)}%`,
+    delay: `${delay.toFixed(2)}s`,
+    duration: `${duration.toFixed(2)}s`,
+    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+    size: `${size}px`,
+    radius: i % 4 === 0 ? '50%' : '2px',
+  }
+})
 
 const SYSTEM_PROMPT = `Sei Sofia, tutor AI di LearnUp Studio. Stai valutando le risposte di un dipendente su un corso obbligatorio di Sicurezza sul Lavoro (D.Lgs. 81/08).
 
@@ -77,8 +95,12 @@ Quando la risposta è soddisfacente termina SEMPRE con: RISPOSTA_CORRETTA
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export default function DemoModal({ onClose }) {
-  const [phase, setPhase] = useState('video')    // 'video' | 'chat' | 'complete'
+export function DemoTutorExperience({
+  onClose,
+  inline = false,
+  bannerText = 'Demo interattiva — Prova il tutor AI di LearnUp Studio',
+}) {
+  const [phase, setPhase] = useState('video')   // 'video' | 'chat' | 'complete'
   const [currentModule, setCurrentModule] = useState(1)
   const [completedModules, setCompletedModules] = useState([])
   const [messages, setMessages] = useState([])
@@ -87,32 +109,29 @@ export default function DemoModal({ onClose }) {
   const [progress, setProgress] = useState(0)
   const [fading, setFading] = useState(false)
 
-  const videoRef = useRef(null)
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
   const modRef = useRef(1)
 
   const mod = MODULES[currentModule - 1]
   const total = MODULES.length
+  const canClose = typeof onClose === 'function'
 
-  // Esc to close
   useEffect(() => {
+    if (!canClose) return undefined
     const fn = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', fn)
     return () => window.removeEventListener('keydown', fn)
-  }, [onClose])
+  }, [canClose, onClose])
 
-  // Auto-scroll chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping])
 
-  // Focus input when entering chat
   useEffect(() => {
     if (phase === 'chat') setTimeout(() => inputRef.current?.focus(), 180)
   }, [phase])
 
-  // ── Fade transition ──────────────────────────────────────────────────────────
   const transition = async (fn) => {
     setFading(true)
     await delay(280)
@@ -120,9 +139,7 @@ export default function DemoModal({ onClose }) {
     setFading(false)
   }
 
-  // ── Video done / skip → chat ─────────────────────────────────────────────────
   const goToChat = () => {
-    videoRef.current?.pause()
     const q = MODULES[modRef.current - 1].question
     transition(() => {
       setPhase('chat')
@@ -130,7 +147,6 @@ export default function DemoModal({ onClose }) {
     })
   }
 
-  // ── Advance module or complete ───────────────────────────────────────────────
   const advance = async () => {
     const m = modRef.current
     setCompletedModules((prev) => [...new Set([...prev, m])])
@@ -150,7 +166,6 @@ export default function DemoModal({ onClose }) {
     }
   }
 
-  // ── OpenAI ───────────────────────────────────────────────────────────────────
   const callAI = async (history) => {
     setIsTyping(true)
     try {
@@ -183,7 +198,6 @@ export default function DemoModal({ onClose }) {
     }
   }
 
-  // ── Send message ─────────────────────────────────────────────────────────────
   const handleSend = async () => {
     if (!input.trim() || isTyping) return
     const msg = { role: 'user', content: input.trim() }
@@ -196,40 +210,51 @@ export default function DemoModal({ onClose }) {
   const modStatus = (id) =>
     completedModules.includes(id) ? 'done' : id === currentModule ? 'active' : 'locked'
 
-  // ─── Render ──────────────────────────────────────────────────────────────────
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4"
-      style={{ background: 'rgba(15,23,42,0.75)', backdropFilter: 'blur(4px)' }}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
+      className={
+        inline
+          ? 'w-full min-h-[600px] flex items-stretch justify-center'
+          : 'fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5'
+      }
+      style={inline ? undefined : { background: 'rgba(8,16,36,0.80)', backdropFilter: 'blur(6px)' }}
+      onClick={(e) => !inline && e.target === e.currentTarget && canClose && onClose()}
     >
       <div
         className="w-full bg-white flex flex-col overflow-hidden"
         style={{
-          maxWidth: 940,
-          maxHeight: '92vh',
+          maxWidth: 1280,
+          maxHeight: inline ? undefined : '94vh',
+          minHeight: inline ? 600 : undefined,
+          height: inline ? '100%' : undefined,
           borderRadius: 20,
-          boxShadow: '0 32px 80px rgba(15,23,42,0.22), 0 0 0 1px rgba(15,23,42,0.06)',
-          animation: 'demoIn 0.24s cubic-bezier(0.16,1,0.3,1) forwards',
+          boxShadow:
+            '0 40px 100px rgba(8,16,36,0.30), 0 0 0 1px rgba(255,255,255,0.08), 0 0 0 1px rgba(15,23,42,0.05)',
+          animation: 'demoIn 0.26s cubic-bezier(0.16,1,0.3,1) forwards',
         }}
       >
         {/* ── Banner ── */}
-        <div className="flex-shrink-0 flex items-center justify-center gap-2 py-2 px-4 text-sm font-semibold text-white bg-blue-600">
+        <div
+          className="flex-shrink-0 flex items-center justify-center gap-2 py-2.5 px-4 text-sm font-semibold text-white"
+          style={{ background: 'linear-gradient(135deg,#1D4ED8 0%,#0EA5E9 100%)' }}
+        >
           <span>🎓</span>
-          <span>Demo interattiva — Prova il tutor AI di LearnUp Studio</span>
+          <span>{bannerText}</span>
         </div>
 
         {/* ── Body ── */}
         <div className="flex flex-1 overflow-hidden min-h-0">
 
-          {/* ══ SIDEBAR (desktop) ══ */}
-          <aside className="hidden md:flex flex-col flex-shrink-0 border-r border-slate-100 bg-slate-50" style={{ width: 260 }}>
-
+          {/* ══ SIDEBAR ══ */}
+          <aside
+            className="hidden md:flex flex-col flex-shrink-0 border-r border-slate-100 bg-slate-50"
+            style={{ width: 280 }}
+          >
             {/* Logo + course */}
             <div className="p-5 border-b border-slate-100">
               <div className="flex items-center gap-2.5 mb-4">
                 <div
-                  className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-sm"
+                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm text-white shadow-sm"
                   style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}
                 >
                   L&gt;
@@ -240,7 +265,7 @@ export default function DemoModal({ onClose }) {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-slate-200 p-3">
+              <div className="bg-white rounded-xl border border-slate-200 p-3 shadow-sm">
                 <div className="flex items-start justify-between gap-2 mb-1">
                   <p className="font-bold text-slate-800 text-sm leading-tight">Sicurezza sul Lavoro</p>
                   <span className="flex-shrink-0 text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-200">
@@ -288,7 +313,11 @@ export default function DemoModal({ onClose }) {
                   >
                     <div
                       className={`w-8 h-8 rounded-lg flex items-center justify-center text-base flex-shrink-0 border ${
-                        s === 'active' ? COLOR_MAP[m.color] : s === 'done' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-slate-50 text-slate-300 border-slate-100'
+                        s === 'active'
+                          ? COLOR_MAP[m.color]
+                          : s === 'done'
+                          ? 'bg-emerald-50 text-emerald-600 border-emerald-200'
+                          : 'bg-slate-50 text-slate-300 border-slate-100'
                       }`}
                     >
                       {s === 'done' ? '✓' : m.icon}
@@ -310,7 +339,7 @@ export default function DemoModal({ onClose }) {
               })}
             </div>
 
-            {/* Sofia avatar footer */}
+            {/* Sofia footer */}
             <div className="p-4 border-t border-slate-100 flex items-center gap-3">
               <div className="relative flex-shrink-0">
                 <div
@@ -356,9 +385,11 @@ export default function DemoModal({ onClose }) {
                   </div>
                 </div>
               </div>
-              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 transition-colors flex-shrink-0">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-              </button>
+              {canClose && (
+                <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-slate-200 text-slate-400 transition-colors flex-shrink-0">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                </button>
+              )}
             </div>
 
             {/* Desktop header */}
@@ -385,12 +416,14 @@ export default function DemoModal({ onClose }) {
                     Chat con Sofia
                   </span>
                 )}
-                <button
-                  onClick={onClose}
-                  className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
-                </button>
+                {canClose && (
+                  <button
+                    onClick={onClose}
+                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                  </button>
+                )}
               </div>
             </div>
 
@@ -399,9 +432,7 @@ export default function DemoModal({ onClose }) {
               className="flex-1 overflow-hidden flex flex-col min-h-0"
               style={{ opacity: fading ? 0 : 1, transition: 'opacity 0.25s ease' }}
             >
-              {phase === 'video' && (
-                <VideoPhase videoRef={videoRef} mod={mod} onEnded={goToChat} onSkip={goToChat} />
-              )}
+              {phase === 'video' && <VideoPhase mod={mod} onContinue={goToChat} />}
               {phase === 'chat' && (
                 <ChatPhase
                   messages={messages}
@@ -421,7 +452,7 @@ export default function DemoModal({ onClose }) {
 
       <style>{`
         @keyframes demoIn {
-          from { opacity:0; transform:scale(0.94) translateY(20px); }
+          from { opacity:0; transform:scale(0.94) translateY(24px); }
           to   { opacity:1; transform:scale(1)    translateY(0); }
         }
         @keyframes confettiFall {
@@ -439,53 +470,90 @@ export default function DemoModal({ onClose }) {
 
 // ─── VideoPhase ───────────────────────────────────────────────────────────────
 
-function VideoPhase({ videoRef, mod, onEnded, onSkip }) {
+function VideoPhase({ mod, onContinue }) {
   return (
-    <div className="relative flex-1 bg-slate-900 flex items-center justify-center overflow-hidden">
-      <video
-        ref={videoRef}
-        src={mod.videoSrc}
-        className="w-full h-full object-contain"
-        autoPlay muted playsInline
-        onEnded={onEnded}
-      />
+    <div className="flex-1 flex flex-col bg-slate-50 min-h-0 overflow-hidden">
 
-      {/* Bottom info bar */}
-      <div
-        className="absolute bottom-0 left-0 right-0 px-6 py-4"
-        style={{ background: 'linear-gradient(to top, rgba(15,23,42,0.92) 0%, transparent 100%)' }}
-      >
-        <div className="flex items-end justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg" style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}>
-              <SofiaIcon size={20} />
-            </div>
-            <div>
-              <p className="text-white text-sm font-bold">Sofia — Tutor AI</p>
-              <p className="text-slate-300 text-xs">{mod.title}</p>
-            </div>
+      {/* Synthesia embed — flex-1 so it fills available height */}
+      <div className="flex-1 min-h-0 flex items-center justify-center bg-slate-100 overflow-hidden">
+        <div
+          className="w-full relative"
+          style={{ position: 'relative', overflow: 'hidden', aspectRatio: '1920/1080' }}
+        >
+          {/* Module badge overlay */}
+          <div className="absolute top-4 left-4 z-10">
+            <span
+              className={`text-xs font-bold px-3 py-1.5 rounded-full border shadow-md backdrop-blur-sm ${COLOR_MAP[mod.color]}`}
+              style={{ background: 'rgba(255,255,255,0.92)' }}
+            >
+              {mod.icon} Modulo {mod.id}
+            </span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-sky-400 font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-            Lezione in corso
-          </div>
+
+          <iframe
+            src={SYNTHESIA_URL}
+            loading="lazy"
+            title={`Sofia — ${mod.title}`}
+            allowFullScreen
+            allow="encrypted-media; fullscreen; microphone; screen-wake-lock;"
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              top: 0,
+              left: 0,
+              border: 'none',
+              padding: 0,
+              margin: 0,
+              overflow: 'hidden',
+            }}
+          />
         </div>
       </div>
 
-      {/* Skip */}
-      <button
-        onClick={onSkip}
-        className="absolute top-4 right-4 text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-all hover:bg-white/20"
-        style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.15)' }}
+      {/* Control bar */}
+      <div
+        className="flex-shrink-0 px-6 py-4 flex items-center justify-between gap-4 bg-white"
+        style={{ borderTop: '1px solid #e2e8f0' }}
       >
-        Salta intro →
-      </button>
+        {/* Sofia info */}
+        <div className="flex items-center gap-3">
+          <div
+            className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+            style={{
+              background: 'linear-gradient(135deg,#2563EB,#38BDF8)',
+              boxShadow: '0 0 0 3px rgba(56,189,248,0.18), 0 4px 12px rgba(37,99,235,0.25)',
+            }}
+          >
+            <SofiaIcon size={20} />
+          </div>
+          <div>
+            <p className="text-slate-800 text-sm font-bold leading-tight">Sofia — Tutor AI</p>
+            <p className="text-slate-500 text-xs mt-0.5">{mod.subtitle}</p>
+          </div>
+        </div>
 
-      {/* Module badge */}
-      <div className="absolute top-4 left-4">
-        <span className={`text-xs font-bold px-3 py-1.5 rounded-full border ${COLOR_MAP[mod.color]}`}>
-          {mod.icon} Modulo {mod.id}
-        </span>
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+          <span className="hidden sm:flex items-center gap-1.5 text-xs text-sky-600 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />
+            Lezione in corso
+          </span>
+
+          <button
+            onClick={onContinue}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-bold transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
+            style={{
+              background: 'linear-gradient(135deg,#2563EB,#0EA5E9)',
+              boxShadow: '0 4px 14px rgba(37,99,235,0.40)',
+            }}
+          >
+            Continua al quiz
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -496,12 +564,14 @@ function VideoPhase({ videoRef, mod, onEnded, onSkip }) {
 function ChatPhase({ messages, isTyping, input, setInput, onSend, inputRef, messagesEndRef }) {
   return (
     <>
-      {/* Messages */}
       <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-4 bg-slate-50">
         {messages.map((msg, i) => (
           <div key={i} className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
             {msg.role === 'assistant' && (
-              <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm" style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}>
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm"
+                style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}
+              >
                 <SofiaIcon size={16} />
               </div>
             )}
@@ -519,7 +589,10 @@ function ChatPhase({ messages, isTyping, input, setInput, onSend, inputRef, mess
 
         {isTyping && (
           <div className="flex gap-2.5">
-            <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm" style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}>
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm"
+              style={{ background: 'linear-gradient(135deg,#2563EB,#38BDF8)' }}
+            >
               <SofiaIcon size={16} />
             </div>
             <div className="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-tl-sm flex items-center gap-1.5 shadow-sm">
@@ -533,7 +606,6 @@ function ChatPhase({ messages, isTyping, input, setInput, onSend, inputRef, mess
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input */}
       <div className="flex-shrink-0 p-4 border-t border-slate-100 bg-white">
         <div className="flex gap-2 items-center">
           <input
@@ -565,42 +637,22 @@ function ChatPhase({ messages, isTyping, input, setInput, onSend, inputRef, mess
 // ─── CompletePhase ────────────────────────────────────────────────────────────
 
 function CompletePhase({ onClose, total }) {
-  const confettiRef = useRef(null)
-  if (!confettiRef.current) {
-    const colors = ['#2563EB', '#0EA5E9', '#38BDF8', '#f59e0b', '#10b981', '#f472b6', '#a855f7', '#ef4444']
-    confettiRef.current = Array.from({ length: 40 }, (_, i) => ({
-      id: i,
-      left: `${(i / 40) * 100 + (Math.random() * 4 - 2)}%`,
-      delay: `${(Math.random() * 2.5).toFixed(2)}s`,
-      duration: `${(2.8 + Math.random() * 2).toFixed(2)}s`,
-      color: colors[i % colors.length],
-      size: `${Math.round(5 + Math.random() * 9)}px`,
-      radius: i % 4 === 0 ? '50%' : '2px',
-    }))
-  }
-
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 py-10 relative overflow-hidden bg-gradient-to-b from-slate-50 to-white text-center">
-      {/* Confetti */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {confettiRef.current.map((p) => (
+        {CONFETTI_PARTICLES.map((p) => (
           <div key={p.id} className="absolute top-0"
             style={{ left: p.left, width: p.size, height: p.size, background: p.color, borderRadius: p.radius, animation: `confettiFall ${p.duration} ${p.delay} ease-in infinite` }} />
         ))}
       </div>
 
       <div className="relative z-10 flex flex-col items-center gap-5 max-w-md">
-        {/* Trophy */}
         <div className="text-8xl" style={{ animation: 'trophyFloat 2.2s ease-in-out infinite', filter: 'drop-shadow(0 4px 16px rgba(245,158,11,0.4))' }}>
           🏆
         </div>
-
-        {/* Badge */}
         <span className="text-sm font-bold px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
           ✓ Corso completato — {total}/{total} moduli
         </span>
-
-        {/* Title */}
         <div>
           <h3 className="text-2xl font-extrabold text-slate-900 mb-2">Complimenti!</h3>
           <p className="text-slate-500 text-sm leading-relaxed">
@@ -609,8 +661,6 @@ function CompletePhase({ onClose, total }) {
             Sofia ha valutato tutte le tue risposte: ottima preparazione!
           </p>
         </div>
-
-        {/* Stats row */}
         <div className="flex gap-3 w-full">
           {[
             { value: '100%', label: 'Completamento' },
@@ -623,8 +673,6 @@ function CompletePhase({ onClose, total }) {
             </div>
           ))}
         </div>
-
-        {/* CTA */}
         <button
           onClick={onClose}
           className="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-white font-bold text-sm transition-all hover:shadow-xl hover:shadow-blue-200 hover:-translate-y-0.5"
@@ -651,4 +699,8 @@ function SofiaIcon({ size = 20 }) {
       <path d="M25 3.5v5M22.5 6h5" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )
+}
+
+export default function DemoModal({ onClose }) {
+  return <DemoTutorExperience onClose={onClose} />
 }

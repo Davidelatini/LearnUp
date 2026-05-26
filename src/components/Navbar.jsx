@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../assets/learnup-logo.svg'
 
 const serviziLinks = [
   { label: 'Corsi eLearning con AI', href: '/servizi/corsi-elearning', icon: '🎬' },
@@ -9,7 +8,7 @@ const serviziLinks = [
   { label: 'Sviluppo Siti Formativi', href: '/servizi/siti-formativi', icon: '🌐' },
 ]
 
-const otherItems = ['Soluzioni', 'Risorse', 'Prezzi', 'Chi siamo']
+const navItems = ['Chi sono', 'Come lavoro', 'Contatti']
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -33,8 +32,17 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <Link to="/">
-              <img src={logo} alt="LearnUp" className="h-9 w-auto" />
+            <Link to="/" style={{ textDecoration: 'none' }}>
+              <span style={{
+                fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em',
+                background: 'linear-gradient(135deg, #2563EB, #0EA5E9)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              }}>
+                Davide
+              </span>
+              <span style={{ fontSize: 11, color: '#94a3b8', fontWeight: 600, marginLeft: 6, letterSpacing: '0.04em' }}>
+                eLearning & AI
+              </span>
             </Link>
           </div>
 
@@ -74,28 +82,20 @@ export default function Navbar() {
               )}
             </div>
 
-            {otherItems.map((item) => (
+            {navItems.map((item) => (
               <button
                 key={item}
-                className="text-slate-600 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-blue-50 flex items-center gap-1"
+                className="text-slate-600 hover:text-blue-600 px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-blue-50"
               >
                 {item}
-                {item !== 'Prezzi' && item !== 'Chi siamo' && (
-                  <svg className="w-3.5 h-3.5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                )}
               </button>
             ))}
           </div>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
-            <button className="text-sm font-medium text-slate-600 hover:text-blue-600 border border-slate-200 hover:border-blue-300 px-4 py-2 rounded-lg transition-colors">
-              Richiedi demo
-            </button>
             <button className="text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition-colors shadow-md shadow-blue-200">
-              Inizia gratis
+              Scrivimi →
             </button>
           </div>
 
@@ -147,15 +147,14 @@ export default function Navbar() {
             </div>
           )}
 
-          {otherItems.map((item) => (
+          {navItems.map((item) => (
             <button key={item} className="text-slate-600 hover:text-blue-600 text-left px-4 py-3 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium">
               {item}
             </button>
           ))}
           <hr className="border-slate-100 my-2" />
-          <button className="text-slate-500 text-left px-4 py-3 text-sm font-medium">Richiedi demo</button>
           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg text-sm font-semibold transition-colors">
-            Inizia gratis
+            Scrivimi →
           </button>
         </div>
       )}

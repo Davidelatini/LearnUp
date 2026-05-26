@@ -1,73 +1,81 @@
-const companies = [
-  'Gruppo Fincantieri',
-  'TIM',
-  'Generali',
-  'Enel',
-  'Ferrovie dello Stato',
-  'UniCredit',
-  'A2A',
-  'Poste Italiane',
-  'Leonardo S.p.A.',
-  'Eni',
-  'Intesa Sanpaolo',
-  'Mediaset',
+import moodleImg     from '../assets/icon/Moodle_idD9n0MGMl_0.png'
+import zoomImg       from '../assets/icon/Zoom-Logo.png'
+import googleMeetImg from '../assets/icon/Google_Meet_text_logo_(2020).svg.png'
+import teamsImg      from '../assets/icon/Microsoft-Teams-Emblem.png'
+import scormImg      from '../assets/icon/scorm-logo-sized-800x451.webp'
+import xapiImg       from '../assets/icon/xapi-logo-sized.webp'
+import doceboImg     from '../assets/icon/idk_bIkuw8_1778333937916.svg'
+
+const LOGOS = [
+  { name: 'Moodle',          img: moodleImg,     h: 40 },
+  { name: 'Zoom',            img: zoomImg,        h: 40 },
+  { name: 'Google Meet',     img: googleMeetImg,  h: 40 },
+  { name: 'Microsoft Teams', img: teamsImg,       h: 64 },
+  { name: 'SCORM',           img: scormImg,       h: 60 },
+  { name: 'xAPI',            img: xapiImg,        h: 60 },
+  { name: 'Docebo',          img: doceboImg,      h: 40 },
 ]
 
 export default function Logos() {
   return (
-    <section className="py-16 bg-white border-y border-slate-100 overflow-hidden">
-      {/* Label */}
-      <div className="flex items-center justify-center gap-4 mb-10 px-4">
-        <span className="flex-1 max-w-[120px] h-px bg-gradient-to-r from-transparent to-slate-200" />
-        <p className="text-center text-slate-400 text-xs font-semibold uppercase tracking-[0.2em]">
-          Scelto da oltre 200 aziende in tutta Italia
-        </p>
-        <span className="flex-1 max-w-[120px] h-px bg-gradient-to-l from-transparent to-slate-200" />
-      </div>
+    <section style={{
+      background: '#ffffff',
+      borderTop: '1px solid #e2e8f0',
+      borderBottom: '1px solid #e2e8f0',
+      padding: '80px 0',
+    }}>
+      <div style={{ position: 'relative', overflow: 'hidden' }}>
 
-      {/* Marquee wrapper */}
-      <div className="relative">
-        {/* Gradient fade left */}
-        <div
-          className="absolute left-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to right, white, transparent)' }}
-        />
-        {/* Gradient fade right */}
-        <div
-          className="absolute right-0 top-0 bottom-0 w-24 z-10 pointer-events-none"
-          style={{ background: 'linear-gradient(to left, white, transparent)' }}
-        />
+        {/* Fade sinistra */}
+        <div style={{
+          position: 'absolute', inset: '0 auto 0 0', width: 120, zIndex: 10,
+          background: 'linear-gradient(to right, #ffffff 30%, transparent)',
+          pointerEvents: 'none',
+        }} />
 
-        {/* Track */}
-        <div className="flex" style={{ animation: 'logosScroll 28s linear infinite' }}>
-          {/* Duplicated twice for seamless loop */}
-          {[...companies, ...companies].map((name, i) => (
-            <LogoChip key={i} name={name} />
+        {/* Fade destra */}
+        <div style={{
+          position: 'absolute', inset: '0 0 0 auto', width: 120, zIndex: 10,
+          background: 'linear-gradient(to left, #ffffff 30%, transparent)',
+          pointerEvents: 'none',
+        }} />
+
+        {/* Track — due copie identiche per loop seamless */}
+        <div className="logos-track" style={{
+          display: 'flex',
+          alignItems: 'center',
+          width: 'max-content',
+          willChange: 'transform',
+        }}>
+          {[...LOGOS, ...LOGOS].map((logo, i) => (
+            <img
+              key={i}
+              src={logo.img}
+              alt={logo.name}
+              style={{
+                flexShrink: 0,
+                height: logo.h,
+                width: 'auto',
+                maxWidth: 130,
+                objectFit: 'contain',
+                opacity: 0.65,
+                margin: '0 68px',
+                display: 'block',
+              }}
+            />
           ))}
         </div>
       </div>
 
       <style>{`
-        @keyframes logosScroll {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
+        .logos-track {
+          animation: logosScroll 30s linear infinite;
         }
-        .logos-track:hover {
-          animation-play-state: paused;
+        @keyframes logosScroll {
+          0%   { transform: translate3d(0, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
         }
       `}</style>
     </section>
-  )
-}
-
-function LogoChip({ name }) {
-  return (
-    <div className="flex-shrink-0 mx-5 flex items-center gap-2.5 px-5 py-2.5 rounded-xl border border-slate-100 bg-slate-50 hover:border-blue-200 hover:bg-blue-50 hover:shadow-sm transition-all duration-200 group cursor-default whitespace-nowrap">
-      {/* Decorative dot */}
-      <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-blue-400 transition-colors flex-shrink-0" />
-      <span className="text-slate-500 group-hover:text-blue-700 font-semibold text-sm tracking-wide transition-colors">
-        {name}
-      </span>
-    </div>
   )
 }

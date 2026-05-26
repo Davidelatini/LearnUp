@@ -2,8 +2,8 @@ import megaphoneImg from '../assets/megaphone-bell-and-smartphone-with-new-email
 
 export default function PreFooterCTA() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-4xl mx-auto text-center">
+    <section className="py-20 px-5 md:px-12 lg:px-20 bg-gradient-to-b from-white to-slate-50">
+      <div className="max-w-[1200px] mx-auto text-center">
         <div className="relative bg-gradient-to-br from-blue-600 to-sky-500 rounded-3xl px-8 py-16 overflow-hidden shadow-2xl shadow-blue-200">
           {/* Decorative circles */}
           <div className="absolute -top-12 -right-12 w-48 h-48 bg-white/10 rounded-full" />
@@ -21,18 +21,18 @@ export default function PreFooterCTA() {
             </div>
 
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-tight">
-              Pronto a digitalizzare
+              Parliamo della tua
               <br />
-              la tua formazione?
+              formazione aziendale
             </h2>
 
             <p className="text-blue-100 text-lg mb-10 max-w-xl mx-auto">
-              Parla con un nostro esperto. Analizziamo gratis le tue esigenze e ti proponiamo la soluzione più adatta alla tua azienda.
+              Una call gratuita di 20 minuti. Nessun impegno. Ti rispondo personalmente entro 24 ore.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button className="w-full sm:w-auto bg-white hover:bg-blue-50 text-blue-700 font-bold px-10 py-4 rounded-xl text-base transition-all hover:scale-105 hover:shadow-xl shadow-lg">
-                Prenota consulenza gratuita →
+                Scrivimi →
               </button>
               <button className="w-full sm:w-auto border-2 border-white/50 hover:border-white text-white font-semibold px-10 py-4 rounded-xl text-base transition-all hover:bg-white/10">
                 Scopri i prezzi

@@ -39,21 +39,21 @@ const colorMap = {
 
 export default function WhyLearnUp() {
   return (
-    <section className="py-24 px-4 bg-white">
-      <div className="max-w-6xl mx-auto">
+    <section className="py-20 px-5 md:px-12 lg:px-20 bg-white">
+      <div className="max-w-[1400px] mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 text-sm text-blue-600 font-semibold uppercase tracking-widest mb-4">
+          <div className="inline-flex items-center gap-2 text-[13px] text-blue-600 font-semibold uppercase tracking-[0.15em] mb-4">
             <span className="w-8 h-px bg-blue-400" />
             Perché sceglierci
             <span className="w-8 h-px bg-blue-400" />
           </div>
-          <h2 className="text-4xl sm:text-5xl font-extrabold text-slate-900 mb-4">
+          <h2 className="text-[28px] sm:text-[36px] lg:text-[52px] font-extrabold text-slate-900 mb-4 leading-tight">
             La formazione e-learning
             <br />
             <span className="text-blue-600">che fa davvero la differenza</span>
           </h2>
-          <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+          <p className="text-slate-500 text-[18px] max-w-2xl mx-auto leading-[1.7]">
             Non siamo una piattaforma generica. Siamo specialisti della formazione aziendale con anni di esperienza sul campo.
           </p>
         </div>
@@ -86,7 +86,7 @@ export default function WhyLearnUp() {
                 <div className="text-slate-400 text-sm mb-6">{statLabel}</div>
                 {/* Content */}
                 <h3 className="text-slate-900 font-extrabold text-xl mb-3">{headline}</h3>
-                <p className="text-slate-500 text-sm leading-relaxed">{body}</p>
+                <p className="text-slate-500 text-[15px] leading-[1.7]">{body}</p>
               </div>
             )
           })}

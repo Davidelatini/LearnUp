@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import logo from '../assets/learnup-logo.svg'
+import logo from '../assets/grafic/learnup-logo.svg'
 
 const QUICK_REPLIES = [
   'Che servizi offrite?',
