@@ -1,95 +1,105 @@
 import { Link } from 'react-router-dom'
-import ServicePage from './ServicePage'
+import Navbar from '../components/Navbar'
+import Footer from '../components/Footer'
+import webinarBgImg from '../assets/Webinar/webinar-bg.jpg'
 
-const data = {
-  includes: [
-    { icon: '🖥️', title: 'Setup piattaforma', description: 'Configurazione professionale di Zoom, Microsoft Teams o Google Meet.' },
-    { icon: '🎙️', title: 'Gestione tecnica della diretta', description: 'Operatore dedicato per audio, video, screen sharing e interazioni.' },
-    { icon: '🎥', title: 'Registrazione e post-produzione', description: 'Registrazione HD e editing professionale del webinar.' },
-    { icon: '📧', title: 'Inviti e gestione partecipanti', description: 'Comunicazioni, reminder e gestione delle iscrizioni.' },
-    { icon: '📋', title: 'Report presenze', description: 'Report dettagliato con presenze, tempi di connessione e domande.' },
-    { icon: '📁', title: 'Materiali post-sessione', description: 'Distribuzione di slide, registrazione e materiali ai partecipanti.' },
-  ],
-  forWho: [
-    { icon: '🎓', title: 'Formatori e coach', description: 'Professionisti che erogano formazione live online a gruppi o singoli.' },
-    { icon: '🏢', title: 'Aziende con team distribuiti', description: 'Organizzazioni con dipendenti da formare da remoto in tutta Italia.' },
-    { icon: '📚', title: 'Enti di formazione continua', description: 'Ordini professionali, associazioni e enti con obblighi ECM/CPD.' },
-  ],
-  steps: [
-    { number: '01', icon: '📅', title: 'Pianificazione sessione', description: 'Definiamo data, piattaforma, agenda e requisiti tecnici.' },
-    { number: '02', icon: '📡', title: 'Gestione diretta', description: 'Gestiamo ogni aspetto tecnico durante la sessione in diretta.' },
-    { number: '03', icon: '📬', title: 'Consegna registrazione e report', description: 'Inviamo registrazione editata, materiali e report presenze.' },
-  ],
-}
-
-const ATTENDEES = [
-  { initials: 'DL', bg: '#60A5FA' },
-  { initials: 'SM', bg: '#E5A1F5' },
-  { initials: 'MR', bg: '#fbbf24' },
-  { initials: 'AR', bg: '#F28482' },
-]
-
-function WebinarHero() {
+export default function ServiceWebinar() {
   return (
-    <section className="pt-32 pb-20 px-4 relative overflow-hidden" style={{ background: 'radial-gradient(circle at 50% 0%, #60A5FA 0%, #E5A1F5 42%, #F4F8F9 72%, #F4F8F9 100%)' }}>
+    <div className="min-h-screen text-slate-800 overflow-x-hidden" style={{ background: 'linear-gradient(160deg, #60A5FA 0%, #E5A1F5 12%, #2563EB 35%, #0EA5E9 58%, #EFF6FF 82%, #f8fafc 100%)' }}>
+      <Navbar />
 
-      <div className="absolute rounded-full blur-3xl pointer-events-none" style={{ width: 560, height: 560, top: '-160px', left: '50%', transform: 'translateX(-50%)', background: '#60A5FA', opacity: 0.32, animation: 'heroBlob1 7s ease-in-out infinite' }} />
-      <div className="absolute rounded-full blur-2xl pointer-events-none" style={{ width: 260, height: 260, top: '40px', right: '8%', background: '#E5A1F5', opacity: 0.45, animation: 'heroBlob2 9s ease-in-out infinite' }} />
-      <div className="absolute rounded-full blur-2xl pointer-events-none" style={{ width: 180, height: 180, bottom: '0px', left: '6%', background: '#60A5FA', opacity: 0.22, animation: 'heroBlob2 6s ease-in-out infinite reverse' }} />
+      {/* HERO */}
+      <section
+        className="relative overflow-hidden flex items-center"
+        style={{ minHeight: '100vh' }}
+      >
+        {/* Background image */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${webinarBgImg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+        {/* Overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(135deg, rgba(96,165,250,0.88) 0%, rgba(229,161,245,0.85) 30%, rgba(37,99,235,0.82) 60%, rgba(14,165,233,0.75) 100%)' }}
+        />
 
-      {/* griglia attendees flottante sinistra */}
-      <div className="hidden lg:block absolute pointer-events-none" style={{ top: '130px', left: 'calc(50% - 460px)', animation: 'heroFloat 5s ease-in-out infinite' }}>
-        <div style={{ background: '#fff', borderRadius: 14, padding: '12px', boxShadow: '0 10px 28px rgba(0,0,0,0.10)', width: 180, position: 'relative' }}>
-          <div style={{ position: 'absolute', top: 8, right: 8, background: '#ef4444', borderRadius: 20, padding: '2px 8px', fontSize: '0.6rem', fontWeight: 700, color: '#fff', display: 'flex', alignItems: 'center', gap: 3 }}>
-            <span style={{ width: 4, height: 4, background: '#fff', borderRadius: '50%', display: 'inline-block' }} />LIVE
+        <style>{`
+          @keyframes heroFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+        `}</style>
+
+        <div className="relative w-full max-w-5xl mx-auto px-6 sm:px-10 py-32 text-center">
+          {/* Badge */}
+          <div
+            className="inline-flex items-center gap-2 rounded-full px-5 py-2 mb-8 text-sm font-semibold"
+            style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', backdropFilter: 'blur(8px)' }}
+          >
+            🎙️ Webinar e lezioni online
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 4 }}>
-            {ATTENDEES.map(({ initials, bg }) => (
-              <div key={initials} style={{ background: bg, borderRadius: 8, height: 52, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <div style={{ width: 22, height: 22, borderRadius: '50%', background: 'rgba(255,255,255,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.55rem', fontWeight: 700, color: '#fff' }}>
-                  {initials}
-                </div>
+
+          {/* Titolo */}
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight text-white">
+            Webinar e lezioni online,<br className="hidden sm:block" /> gestiti da A a Z
+          </h1>
+
+          {/* Descrizione */}
+          <p className="text-xl sm:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.90)' }}>
+            Organizzo e gestisco le tue sessioni formative in diretta — setup tecnico, coordinamento e registrazioni incluse.
+          </p>
+
+          {/* Pills */}
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {['✓ Zoom · Teams · Meet', '✓ Registrazione inclusa', '✓ Report presenze'].map((label) => (
+              <span
+                key={label}
+                style={{ background: 'rgba(255,255,255,0.18)', color: '#fff', border: '1px solid rgba(255,255,255,0.4)', backdropFilter: 'blur(8px)', borderRadius: 20, padding: '7px 18px', fontSize: 13, fontWeight: 600 }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <Link
+            to="/contatti"
+            className="inline-block font-bold px-12 py-5 rounded-2xl text-base transition-all hover:scale-105 shadow-xl hover:shadow-2xl mb-16"
+            style={{ background: '#fff', color: '#2563EB' }}
+          >
+            Richiedi consulenza gratuita →
+          </Link>
+
+          {/* Card feature */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+            {[
+              { icon: '📹', title: 'Zoom · Teams · Meet', desc: 'Setup tecnico completo sulle principali piattaforme di videoconferenza del mercato.' },
+              { icon: '⏺️', title: 'Registrazione inclusa', desc: 'Ogni sessione viene registrata e consegnata in alta qualità, pronta per essere riutilizzata.' },
+              { icon: '📋', title: 'Report presenze', desc: 'Report dettagliati su partecipanti, durata e coinvolgimento per ogni webinar.' },
+            ].map(({ icon, title, desc }) => (
+              <div
+                key={title}
+                style={{
+                  background: 'rgba(255,255,255,0.12)',
+                  backdropFilter: 'blur(14px)',
+                  border: '1px solid rgba(255,255,255,0.3)',
+                  borderRadius: 20,
+                  padding: '28px 24px',
+                  textAlign: 'left',
+                }}
+              >
+                <div style={{ fontSize: '1.8rem', marginBottom: 12 }}>{icon}</div>
+                <div style={{ fontWeight: 700, color: '#fff', fontSize: '1rem', marginBottom: 8 }}>{title}</div>
+                <div style={{ color: 'rgba(255,255,255,0.80)', fontSize: '0.85rem', lineHeight: 1.6 }}>{desc}</div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* badge destra */}
-      <div className="hidden lg:block absolute pointer-events-none" style={{ top: '200px', right: 'calc(50% - 460px)', animation: 'heroFloat 6.5s ease-in-out infinite reverse' }}>
-        <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 24, padding: '7px 16px', fontSize: '0.78rem', fontWeight: 600, color: '#1e293b', boxShadow: '0 6px 16px rgba(0,0,0,0.08)', display: 'flex', alignItems: 'center', gap: 7 }}>
-          <span style={{ color: '#60A5FA' }}>✦</span> Zoom · Teams · Meet
-        </div>
-      </div>
-
-      <style>{`
-        @keyframes heroBlob1 { 0%,100%{transform:translateX(-50%) scale(1);} 50%{transform:translateX(-50%) scale(1.12) translateY(-14px);} }
-        @keyframes heroBlob2 { 0%,100%{transform:scale(1);} 50%{transform:scale(1.18) translate(8px,-10px);} }
-        @keyframes heroFloat { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
-      `}</style>
-
-      <div className="max-w-4xl mx-auto text-center relative">
-        <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6 text-sm font-semibold" style={{ background: 'rgba(255,255,255,0.75)', color: '#1e3a8a', border: '1px solid rgba(96,165,250,0.4)', backdropFilter: 'blur(8px)' }}>
-          🎙️ Webinar e Lezioni Online
-        </div>
-        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold mb-6 leading-tight" style={{ color: '#1e293b' }}>
-          Webinar e lezioni online, gestiti da A a Z
-        </h1>
-        <p className="text-lg sm:text-xl mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: '#475569' }}>
-          Organizziamo e gestiamo le tue sessioni formative in diretta. Setup tecnico, coordinamento e registrazioni incluse.
-        </p>
-        <Link
-          to="/contatti"
-          className="inline-block font-bold px-10 py-4 rounded-xl text-base transition-all hover:scale-105 shadow-lg hover:shadow-xl"
-          style={{ background: '#1e293b', color: '#fff' }}
-        >
-          Richiedi consulenza gratuita →
-        </Link>
-      </div>
-    </section>
+      <Footer />
+    </div>
   )
-}
-
-export default function ServiceWebinar() {
-  return <ServicePage {...data} heroSlot={<WebinarHero />} />
 }
