@@ -1,0 +1,867 @@
+/* ═══════════════════════════════════════════════════════════
+   AURA OS — Cinematic Landing  (CSS only, 60 FPS target)
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  --aura-bg:     #03070d;
+  --aura-panel:  rgba(7, 18, 30, 0.72);
+  --aura-border: rgba(80, 220, 255, 0.20);
+  --aura-cyan:   #4ddfff;
+  --aura-blue:   #3b82f6;
+  --aura-violet: #a855f7;
+  --aura-gold:   #f0b94a;
+  --aura-green:  #35ff9a;
+  --aura-text:   #d9f4ff;
+  --aura-muted:  #7f9dad;
+}
+
+/* ═══════════════════ KEYFRAMES ═══════════════════════════ */
+
+/* Whole UI breathes like a camera */
+@keyframes camera-breathe {
+  0%,100% { transform: translate(0px, 0px); }
+  25%      { transform: translate(1px, -1px); }
+  50%      { transform: translate(-1px, 0.5px); }
+  75%      { transform: translate(0.5px, 1px); }
+}
+
+/* Grid opacity pulse */
+@keyframes grid-pulse {
+  0%,100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* Orbit outer ring slow spin (SVG element) */
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Core: scale breathing */
+@keyframes core-breathe {
+  0%,100% { transform: translate(-50%,-50%) scale(1); }
+  50%      { transform: translate(-50%,-50%) scale(1.055); }
+}
+
+/* Core body: glow breathing */
+@keyframes core-glow {
+  0%,100% {
+    box-shadow:
+      0 0 22px rgba(77,223,255,0.14),
+      0 0 55px rgba(77,223,255,0.05),
+      inset 0 0 14px rgba(77,223,255,0.06);
+  }
+  50% {
+    box-shadow:
+      0 0 40px rgba(77,223,255,0.28),
+      0 0 90px rgba(77,223,255,0.10),
+      inset 0 0 22px rgba(77,223,255,0.10);
+  }
+}
+
+/* Energy surge every ~8s */
+@keyframes energy-surge {
+  0%,75%,100% {
+    box-shadow:
+      0 0 22px rgba(77,223,255,0.14),
+      0 0 55px rgba(77,223,255,0.05);
+  }
+  82% {
+    box-shadow:
+      0 0 80px rgba(77,223,255,0.60),
+      0 0 160px rgba(77,223,255,0.25);
+  }
+  90% {
+    box-shadow:
+      0 0 35px rgba(77,223,255,0.20),
+      0 0 70px rgba(77,223,255,0.08);
+  }
+}
+
+/* Concentric wave rings expanding from core */
+@keyframes wave-expand {
+  0%   { transform: translate(-50%,-50%) scale(1);    opacity: 0.45; }
+  100% { transform: translate(-50%,-50%) scale(4.2);  opacity: 0; }
+}
+
+/* Agent node ring breathing */
+@keyframes node-breathe {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.10); }
+}
+
+/* Agent node glow pulse */
+@keyframes node-glow-pulse {
+  0%,100% { filter: brightness(1); }
+  50%      { filter: brightness(1.35); }
+}
+
+/* Online indicator dot */
+@keyframes dot-pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(0.7); }
+}
+
+/* Topbar online status dot */
+@keyframes status-online {
+  0%,100% { box-shadow: 0 0 6px #35ff9a, 0 0 0 0 rgba(53,255,154,0.45); }
+  60%      { box-shadow: 0 0 10px #35ff9a, 0 0 0 5px rgba(53,255,154,0); }
+}
+
+/* Activity rows slide in */
+@keyframes activity-in {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Cursor blink for command bar */
+@keyframes cursor-blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* Logo mark float */
+@keyframes float-gentle {
+  0%,100% { transform: translateY(0px); }
+  50%      { transform: translateY(-2px); }
+}
+
+/* Inner ring rotation inside core */
+@keyframes inner-ring-spin {
+  to { transform: rotate(-360deg); }
+}
+
+/* Card bar fill animation handled by JS count-up */
+
+/* ══════════════════ BASE SHELL ══════════════════════════ */
+
+.aura-root {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 48px 1fr auto 56px;
+  background: var(--aura-bg);
+  color: var(--aura-text);
+  font-family: 'Share Tech Mono', 'Courier New', monospace;
+  overflow: hidden;
+}
+
+/* CRT scanlines — barely visible */
+.aura-root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.022) 2px,
+    rgba(0,0,0,0.022) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Background canvas */
+.aura-bg-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Animated grid */
+.aura-grid-bg {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(77,223,255,0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(77,223,255,0.032) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: grid-pulse 9s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════ TOPBAR ════════════════════════════ */
+
+.aura-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  gap: 20px;
+  background: rgba(3,9,18,0.94);
+  border-bottom: 1px solid var(--aura-border);
+  backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 100;
+}
+
+.aura-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.aura-logo-mark {
+  font-size: 1.1rem;
+  color: var(--aura-cyan);
+  filter: drop-shadow(0 0 7px rgba(77,223,255,0.65));
+  animation: float-gentle 6s ease-in-out infinite;
+}
+
+.aura-logo-text {
+  font-size: 0.88rem;
+  letter-spacing: 5px;
+  color: var(--aura-text);
+}
+
+.aura-logo-text em {
+  color: var(--aura-muted);
+  font-style: normal;
+}
+
+.aura-logo-ver {
+  font-size: 0.46rem;
+  letter-spacing: 1.5px;
+  color: var(--aura-muted);
+  opacity: 0.45;
+}
+
+.aura-topbar-mid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.aura-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--aura-green);
+  animation: status-online 2.8s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.aura-topbar-status {
+  font-size: 0.56rem;
+  letter-spacing: 2px;
+  color: var(--aura-muted);
+  text-transform: uppercase;
+}
+
+.aura-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.aura-clock {
+  font-size: 0.74rem;
+  letter-spacing: 2px;
+  color: var(--aura-cyan);
+  text-shadow: 0 0 10px rgba(77,223,255,0.5);
+}
+
+/* ── Mini bars ───────────────────────────────────────────── */
+
+.aura-minibar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.aura-minibar-lbl {
+  font-size: 0.5rem;
+  letter-spacing: 1.5px;
+  color: var(--aura-muted);
+  text-transform: uppercase;
+  width: 26px;
+}
+
+.aura-minibar-track {
+  width: 46px;
+  height: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.aura-minibar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+.aura-minibar-val {
+  font-size: 0.5rem;
+  letter-spacing: 1px;
+  color: var(--aura-muted);
+  width: 26px;
+  text-align: right;
+}
+
+/* ═══════════════════ BODY ══════════════════════════════ */
+
+/* Camera breathing applied here — max 2px drift */
+.aura-body {
+  display: flex;
+  min-height: 0;
+  position: relative;
+  z-index: 1;
+  animation: camera-breathe 11s ease-in-out infinite;
+}
+
+/* ═══════════════════ LEFT SIDEBAR ══════════════════════ */
+
+.aura-sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--aura-border);
+  background: var(--aura-panel);
+  backdrop-filter: blur(16px);
+  padding: 14px 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.aura-sec-label {
+  font-size: 0.46rem;
+  letter-spacing: 4px;
+  color: var(--aura-cyan);
+  opacity: 0.45;
+  text-transform: uppercase;
+  padding: 4px 14px 6px;
+  flex-shrink: 0;
+}
+
+.aura-sag-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 14px 7px 12px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.25s;
+}
+
+.aura-sag-row:hover  { background: rgba(77,223,255,0.055); }
+.aura-sag-row.selected { background: rgba(77,223,255,0.08); }
+
+/* Vertical accent bar on selection */
+.aura-sag-sel-bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  opacity: 0;
+  transition: opacity 0.22s;
+  border-radius: 0 1px 1px 0;
+}
+
+.aura-sag-row.selected .aura-sag-sel-bar { opacity: 1; }
+
+.aura-sag-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: filter 0.22s;
+}
+
+.aura-sag-row:hover .aura-sag-icon,
+.aura-sag-row.selected .aura-sag-icon {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.aura-sag-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.aura-sag-name {
+  font-size: 0.64rem;
+  letter-spacing: 2px;
+  color: var(--aura-text);
+  transition: color 0.2s;
+}
+
+.aura-sag-row:hover .aura-sag-name { color: #fff; }
+
+.aura-sag-role {
+  font-size: 0.5rem;
+  letter-spacing: 1px;
+  color: var(--aura-muted);
+}
+
+.aura-sag-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: dot-pulse 2.5s ease-in-out infinite;
+  animation-name: none; /* overridden inline per status */
+}
+
+.aura-sidebar-sep {
+  height: 1px;
+  background: var(--aura-border);
+  margin: 10px 14px;
+  flex-shrink: 0;
+}
+
+.aura-net-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 14px;
+}
+
+.aura-net-key { font-size: 0.52rem; letter-spacing: 1px; color: var(--aura-muted); }
+.aura-net-val { font-size: 0.6rem;  letter-spacing: 1px; }
+
+/* ═══════════════════ CENTER ════════════════════════════ */
+
+.aura-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  overflow: hidden;
+  padding: 12px;
+  position: relative;
+}
+
+.aura-center-head { text-align: center; flex-shrink: 0; }
+
+.aura-center-title {
+  font-size: 1rem;
+  letter-spacing: 10px;
+  color: var(--aura-cyan);
+  text-shadow: 0 0 30px rgba(77,223,255,0.48);
+  margin: 0;
+  font-weight: 400;
+  animation: float-gentle 7s ease-in-out infinite;
+}
+
+.aura-center-sub {
+  font-size: 0.53rem;
+  letter-spacing: 2px;
+  color: var(--aura-muted);
+  margin: 5px 0 0;
+  opacity: 0.6;
+}
+
+/* ═══════════════════ ORBIT ═════════════════════════════ */
+
+.aura-orbit {
+  position: relative;
+  width: 340px;
+  height: 340px;
+  flex-shrink: 0;
+}
+
+.aura-orbit-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: visible;
+}
+
+/* Spinning outer ring (SVG circle element) */
+.aura-ring-outer {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  animation: ring-spin 60s linear infinite;
+}
+
+/* ── Concentric waves ────────────────────────────────────── */
+
+.aura-wave {
+  position: absolute;
+  left: 170px;
+  top: 170px;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 1px solid rgba(77,223,255,0.32);
+  pointer-events: none;
+  z-index: 1;
+  animation: wave-expand 6s ease-out infinite;
+}
+
+/* ── Core reactor ────────────────────────────────────────── */
+
+.aura-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 76px;
+  height: 76px;
+  cursor: pointer;
+  z-index: 3;
+  animation: core-breathe 4.5s ease-in-out infinite;
+}
+
+.aura-core-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(12,35,55,0.98), rgba(3,9,18,0.99));
+  border: 1px solid rgba(77,223,255,0.48);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  animation: core-glow 4.5s ease-in-out infinite, energy-surge 8s ease-in-out infinite;
+  transition: border-color 0.3s;
+}
+
+.aura-core:hover .aura-core-body {
+  border-color: rgba(77,223,255,0.88);
+}
+
+/* Small decorative inner ring */
+.aura-core-inner-ring {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(77,223,255,0.18);
+  border-top-color: rgba(77,223,255,0.50);
+  animation: inner-ring-spin 8s linear infinite;
+  pointer-events: none;
+}
+
+.aura-core-name {
+  font-size: 0.55rem;
+  letter-spacing: 3px;
+  color: var(--aura-cyan);
+  text-shadow: 0 0 14px rgba(77,223,255,0.75);
+  position: relative;
+}
+
+.aura-core-sub {
+  font-size: 0.38rem;
+  letter-spacing: 2px;
+  color: var(--aura-muted);
+  opacity: 0.55;
+  position: relative;
+}
+
+/* ── Agent nodes ─────────────────────────────────────────── */
+
+.aura-orbit-node {
+  position: absolute;
+  transform: translate(-50%,-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.aura-node-ring {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, rgba(12,28,45,0.96), rgba(3,9,18,0.97));
+  border: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.28s, background 0.28s;
+  animation: node-breathe 4s ease-in-out infinite;
+}
+
+.aura-orbit-node:hover .aura-node-ring {
+  background: rgba(10,25,42,0.78);
+  box-shadow: 0 0 22px currentColor !important;
+}
+
+.aura-node-icon {
+  font-size: 1rem;
+  line-height: 1;
+  transition: filter 0.22s;
+  position: relative;
+  z-index: 1;
+}
+
+.aura-orbit-node:hover .aura-node-icon {
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.aura-node-label {
+  font-size: 0.44rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+/* Status dot on node (top-right) */
+.aura-node-sdot {
+  position: absolute;
+  top: 0;
+  right: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid rgba(3,9,18,0.85);
+  animation: dot-pulse 2.5s ease-in-out infinite;
+}
+
+/* ═══════════════════ RIGHT PANEL ═══════════════════════ */
+
+.aura-right {
+  width: 260px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--aura-border);
+  background: var(--aura-panel);
+  backdrop-filter: blur(16px);
+  padding: 14px 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.aura-right::-webkit-scrollbar { width: 2px; }
+.aura-right::-webkit-scrollbar-track { background: transparent; }
+.aura-right::-webkit-scrollbar-thumb { background: var(--aura-border); border-radius: 2px; }
+
+.aura-pan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.aura-pan-cell {
+  background: rgba(77,223,255,0.028);
+  border: 1px solid rgba(77,223,255,0.08);
+  border-radius: 5px;
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: border-color 0.22s, background 0.22s;
+}
+
+.aura-pan-cell:hover {
+  border-color: rgba(77,223,255,0.20);
+  background: rgba(77,223,255,0.05);
+}
+
+.aura-pan-num {
+  font-size: 1.5rem;
+  font-weight: 200;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.aura-pan-lbl {
+  font-size: 0.46rem;
+  letter-spacing: 1.5px;
+  color: var(--aura-muted);
+  text-transform: uppercase;
+}
+
+.aura-right-sep {
+  height: 1px;
+  background: var(--aura-border);
+  margin: 5px 0;
+  flex-shrink: 0;
+}
+
+.aura-act-row {
+  display: grid;
+  grid-template-columns: 36px 54px 1fr;
+  gap: 4px;
+  align-items: start;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(77,223,255,0.05);
+  animation: activity-in 0.45s ease both;
+}
+
+.aura-act-time  { font-size: 0.5rem; color: var(--aura-muted); letter-spacing: 0.5px; padding-top: 1px; }
+.aura-act-agent { font-size: 0.5rem; letter-spacing: 1px; text-transform: uppercase; padding-top: 1px; }
+.aura-act-text  { font-size: 0.56rem; color: rgba(217,244,255,0.6); letter-spacing: 0.3px; line-height: 1.45; }
+
+.aura-ai-msg {
+  font-size: 0.63rem;
+  font-family: 'Inter', sans-serif;
+  color: rgba(217,244,255,0.55);
+  line-height: 1.7;
+  font-style: italic;
+  border-left: 2px solid rgba(77,223,255,0.25);
+  padding-left: 10px;
+  margin: 2px 0 0;
+}
+
+/* ═══════════════════ BOTTOM CARDS ══════════════════════ */
+
+.aura-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--aura-border);
+  background: rgba(3,9,18,0.80);
+  position: relative;
+  z-index: 1;
+}
+
+.aura-card {
+  background: var(--aura-panel);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 9px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  backdrop-filter: blur(10px);
+  cursor: default;
+  transition: transform 0.24s cubic-bezier(.22,.68,0,1.2), box-shadow 0.24s;
+}
+
+.aura-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.38);
+}
+
+.aura-card-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.aura-card-icon  { font-size: 0.74rem; line-height: 1; flex-shrink: 0; }
+.aura-card-label { font-size: 0.44rem; letter-spacing: 2px; color: var(--aura-muted); text-transform: uppercase; }
+.aura-card-value { font-size: 0.66rem; letter-spacing: 0.4px; line-height: 1.3; }
+
+.aura-card-bar-track {
+  height: 2px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.aura-card-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.04s linear;
+}
+
+/* ═══════════════════ COMMAND BAR ═══════════════════════ */
+
+.aura-cmdbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 20px;
+  border-top: 1px solid var(--aura-border);
+  background: rgba(3,9,18,0.97);
+  backdrop-filter: blur(16px);
+  position: relative;
+  z-index: 100;
+  transition: box-shadow 0.3s;
+}
+
+.aura-cmdbar.focused {
+  box-shadow:
+    inset 0 1px 0 rgba(77,223,255,0.32),
+    0 -4px 24px rgba(77,223,255,0.06);
+}
+
+.aura-cmd-prefix {
+  font-size: 0.88rem;
+  color: var(--aura-cyan);
+  opacity: 0.38;
+  flex-shrink: 0;
+  transition: opacity 0.2s;
+}
+
+.aura-cmdbar.focused .aura-cmd-prefix { opacity: 0.7; }
+
+.aura-cmd-field {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.aura-cmd-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--aura-text);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+  caret-color: var(--aura-cyan);
+  position: relative;
+  z-index: 1;
+}
+
+/* Typing placeholder sits on top of the invisible input */
+.aura-cmd-placeholder {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+  color: var(--aura-muted);
+  opacity: 0.48;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.aura-cmd-cursor {
+  animation: cursor-blink 1s step-end infinite;
+  color: var(--aura-cyan);
+  opacity: 0.75;
+}
+
+.aura-begin-btn {
+  background: rgba(77,223,255,0.055);
+  border: 1px solid rgba(77,223,255,0.28);
+  border-radius: 4px;
+  color: var(--aura-cyan);
+  cursor: pointer;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 3px;
+  padding: 9px 20px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.18s, box-shadow 0.18s, border-color 0.18s;
+  flex-shrink: 0;
+}
+
+.aura-begin-btn:hover {
+  background: rgba(77,223,255,0.12);
+  border-color: rgba(77,223,255,0.55);
+  box-shadow: 0 0 22px rgba(77,223,255,0.18);
+}
+
+.aura-btn-arrow { margin-left: 6px; }

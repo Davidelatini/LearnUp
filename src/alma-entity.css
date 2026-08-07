@@ -1,0 +1,181 @@
+/* AlmaEntity — animated identity — scoped .ame-* */
+
+.ame-root {
+  --ame-accent: #39ff14;
+  --ame-glow-a: rgba(57, 255, 20, 0.55);
+  --ame-glow-b: rgba(57, 255, 20, 0.22);
+  --ame-glow-c: rgba(57, 255, 20, 0.10);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 14px;
+  animation: ame-root-breathe 7s ease-in-out infinite;
+}
+
+/* ── Halos ────────────────────────────────────────────────── */
+
+.ame-halo {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: transform 4s ease-in-out, opacity 4s ease-in-out;
+}
+
+.ame-halo-outer {
+  width: min(520px, 64vh);
+  height: min(520px, 64vh);
+  background: radial-gradient(circle, var(--ame-glow-c) 0%, transparent 70%);
+  animation: ame-halo-pulse 9s ease-in-out infinite;
+}
+
+.ame-halo-inner {
+  width: min(290px, 36vh);
+  height: min(290px, 36vh);
+  background: radial-gradient(circle, var(--ame-glow-b) 0%, transparent 70%);
+  animation: ame-halo-pulse 7.5s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+.ame-speaking .ame-halo-outer { animation-duration: 5s; }
+.ame-speaking .ame-halo-inner { animation-duration: 4s; }
+
+/* Breathing: halos follow the same inhale/hold/exhale rhythm */
+.ame-breathing.ame-phase-inhale .ame-halo-outer,
+.ame-breathing.ame-phase-inhale .ame-halo-inner {
+  transform: scale(1.18);
+  opacity: 1;
+  transition-duration: 4s;
+}
+
+.ame-breathing.ame-phase-hold .ame-halo-outer,
+.ame-breathing.ame-phase-hold .ame-halo-inner {
+  transform: scale(1.18);
+  opacity: 1;
+  transition-duration: 0.2s;
+}
+
+.ame-breathing.ame-phase-exhale .ame-halo-outer,
+.ame-breathing.ame-phase-exhale .ame-halo-inner {
+  transform: scale(0.94);
+  opacity: 0.62;
+  transition-duration: 5s;
+}
+
+/* ── SVG container ────────────────────────────────────────── */
+
+.ame-svg {
+  width: min(340px, 44vh);
+  height: min(340px, 44vh);
+  overflow: visible;
+  filter: drop-shadow(0 0 24px rgba(57, 255, 20, 0.20));
+  transition: filter 0.8s ease;
+}
+
+.ame-speaking .ame-svg {
+  filter: drop-shadow(0 0 44px rgba(57, 255, 20, 0.42));
+}
+
+.ame-breathing .ame-svg {
+  filter: drop-shadow(0 0 38px rgba(57, 255, 20, 0.36));
+}
+
+/* ── Wave opacity during speaking ────────────────────────── */
+
+.ame-speaking .ame-waves path {
+  opacity: 0.62;
+}
+
+/* ── Central nucleus ──────────────────────────────────────── */
+
+.ame-nucleus {
+  transform-box: view-box;
+  transform-origin: center;
+  /* Base transition always on — lets breathing phases animate smoothly */
+  transition: transform 4s ease-in-out, filter 4s ease-in-out;
+  animation: ame-nucleus-breathe 6s ease-in-out infinite;
+}
+
+/* Pause idle animation during guided breathing so phase CSS takes control */
+.ame-breathing .ame-nucleus {
+  animation: none;
+}
+
+.ame-breathing.ame-phase-inhale .ame-nucleus {
+  transform: scale(1.5);
+  filter: drop-shadow(0 0 38px rgba(57, 255, 20, 0.72));
+  transition-duration: 4s;
+}
+
+.ame-breathing.ame-phase-hold .ame-nucleus {
+  transform: scale(1.5);
+  filter: drop-shadow(0 0 38px rgba(57, 255, 20, 0.72));
+  transition-duration: 0.2s;
+}
+
+.ame-breathing.ame-phase-exhale .ame-nucleus {
+  transform: scale(1);
+  filter: drop-shadow(0 0 14px rgba(57, 255, 20, 0.35));
+  transition-duration: 5s;
+}
+
+/* ── Label ────────────────────────────────────────────────── */
+
+.ame-label {
+  color: rgba(57, 255, 20, 0.38);
+  font-size: 0.56rem;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(57, 255, 20, 0.18);
+  transition: color 0.6s, text-shadow 0.6s;
+  user-select: none;
+}
+
+.ame-speaking .ame-label,
+.ame-breathing .ame-label {
+  color: rgba(57, 255, 20, 0.74);
+  text-shadow: 0 0 24px rgba(57, 255, 20, 0.44);
+}
+
+/* ── Quadrata: fase pausa a vuoto (hold-out) ─────────────── */
+/* Stessa visual di exhale: nucleo piccolo, alos contratti */
+
+.ame-breathing.ame-phase-hold-out .ame-halo-outer,
+.ame-breathing.ame-phase-hold-out .ame-halo-inner {
+  transform: scale(0.94);
+  opacity: 0.62;
+  transition-duration: 4s;
+}
+
+.ame-breathing.ame-phase-hold-out .ame-nucleus {
+  transform: scale(1);
+  filter: drop-shadow(0 0 14px rgba(57, 255, 20, 0.35));
+  transition-duration: 4s;
+}
+
+/* ── Keyframes ────────────────────────────────────────────── */
+
+@keyframes ame-root-breathe {
+  0%, 100% { opacity: 0.80; transform: translateY(0);    }
+  50%       { opacity: 1.00; transform: translateY(-4px); }
+}
+
+@keyframes ame-halo-pulse {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%       { transform: scale(1.07); opacity: 0.92; }
+}
+
+@keyframes ame-nucleus-breathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 14px rgba(57, 255, 20, 0.35));
+  }
+  50% {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 28px rgba(57, 255, 20, 0.58));
+  }
+}

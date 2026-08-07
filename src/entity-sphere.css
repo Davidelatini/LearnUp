@@ -1,0 +1,224 @@
+.es-root {
+  --es-accent: #39ff14;
+  --es-glow-a: color-mix(in srgb, var(--es-accent) 42%, transparent);
+  --es-glow-b: color-mix(in srgb, var(--es-accent) 20%, transparent);
+  --es-glow-c: color-mix(in srgb, var(--es-accent) 10%, transparent);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 14px;
+  animation: es-root-breathe 8s ease-in-out infinite;
+}
+
+.es-halo {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.es-halo-outer {
+  width: min(520px, 64vh);
+  height: min(520px, 64vh);
+  background: radial-gradient(circle, var(--es-glow-c) 0%, transparent 70%);
+  animation: es-halo-pulse 9s ease-in-out infinite;
+}
+
+.es-halo-inner {
+  width: min(290px, 36vh);
+  height: min(290px, 36vh);
+  background: radial-gradient(circle, var(--es-glow-b) 0%, transparent 70%);
+  animation: es-halo-pulse 7.4s ease-in-out infinite;
+  animation-delay: -1.8s;
+}
+
+.es-svg {
+  width: min(340px, 44vh);
+  height: min(340px, 44vh);
+  overflow: visible;
+  filter: drop-shadow(0 0 30px var(--es-glow-b));
+  transition: filter 0.7s ease, transform 0.8s ease;
+}
+
+.es-speaking .es-svg {
+  filter: drop-shadow(0 0 48px var(--es-glow-a));
+}
+
+.es-breathing.es-phase-inhale .es-svg {
+  transform: scale(1);
+}
+
+.es-breathing.es-phase-hold .es-svg {
+  transform: scale(1);
+}
+
+.es-breathing.es-phase-exhale .es-svg {
+  transform: scale(1);
+}
+
+.es-stroke {
+  stroke: var(--es-accent);
+  fill: none;
+}
+
+.es-g-outer,
+.es-g-mid,
+.es-breath-core,
+.es-g-diamond,
+.es-ring-inner,
+.es-ring-core,
+.es-core-dot {
+  transform-box: view-box;
+  transform-origin: center;
+}
+
+.es-breath-core {
+  transition: transform 4s ease-in-out, filter 4s ease-in-out, opacity 0.6s ease;
+  filter: drop-shadow(0 0 14px var(--es-glow-b));
+}
+
+.es-core-fill {
+  fill: var(--es-glow-c);
+  opacity: 0.35;
+}
+
+.es-g-outer { animation: es-spin-cw 96s linear infinite; }
+.es-g-mid { animation: es-spin-ccw 72s linear infinite; }
+.es-g-diamond { animation: es-spin-cw 44s linear infinite; }
+
+.es-soft {
+  animation-duration: 12s;
+}
+
+.es-soft .es-halo-outer {
+  animation-duration: 14s;
+}
+
+.es-soft .es-halo-inner {
+  animation-duration: 11s;
+}
+
+.es-soft .es-g-outer { animation-duration: 142s; }
+.es-soft .es-g-mid { animation-duration: 118s; }
+.es-soft .es-g-diamond { animation-duration: 76s; }
+
+.es-soft .es-ring-inner {
+  animation-duration: 11s;
+}
+
+.es-soft .es-ring-core,
+.es-soft .es-core-dot {
+  animation-duration: 10s;
+}
+
+.es-speaking .es-g-outer { animation-duration: 38s; }
+.es-speaking .es-g-mid { animation-duration: 30s; }
+.es-speaking .es-g-diamond { animation-duration: 18s; }
+
+.es-breathing .es-g-outer,
+.es-breathing .es-g-mid,
+.es-breathing .es-arm,
+.es-breathing .es-tick,
+.es-breathing .es-ring-outer-line,
+.es-breathing .es-ring-mid-line {
+  opacity: 0.13;
+}
+
+.es-breathing.es-phase-inhale .es-breath-core {
+  transform: scale(1.4);
+  filter: drop-shadow(0 0 30px var(--es-glow-a));
+  transition-duration: 4s;
+}
+
+.es-breathing.es-phase-hold .es-breath-core {
+  transform: scale(1.4);
+  filter: drop-shadow(0 0 30px var(--es-glow-a));
+  transition-duration: 0.2s;
+}
+
+.es-breathing.es-phase-exhale .es-breath-core {
+  transform: scale(1);
+  filter: drop-shadow(0 0 12px var(--es-glow-b));
+  transition-duration: 5s;
+}
+
+.es-ring-inner {
+  animation: es-ring-breathe 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px var(--es-accent));
+}
+
+.es-ring-core {
+  animation: es-core-pulse 7s ease-in-out infinite;
+  filter: drop-shadow(0 0 7px var(--es-accent));
+}
+
+.es-core-dot {
+  fill: var(--es-accent);
+  animation: es-dot-beat 7s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px var(--es-accent));
+}
+
+.es-breathing.es-phase-inhale .es-halo-outer,
+.es-breathing.es-phase-inhale .es-halo-inner {
+  transform: scale(1.18);
+  opacity: 1;
+}
+
+.es-breathing.es-phase-exhale .es-halo-outer,
+.es-breathing.es-phase-exhale .es-halo-inner {
+  transform: scale(0.94);
+  opacity: 0.62;
+}
+
+.es-orb {
+  fill: var(--es-accent);
+  filter: drop-shadow(0 0 4px var(--es-accent));
+  opacity: 0.68;
+}
+
+.es-diamond { opacity: 0.42; }
+.es-arm { opacity: 0.24; }
+.es-tick { opacity: 0.25; }
+.es-tick-major { opacity: 0.44; }
+.es-ring-outer-line { opacity: 0.28; }
+.es-ring-mid-line { opacity: 0.38; }
+
+.es-label {
+  color: color-mix(in srgb, var(--es-accent) 64%, transparent);
+  font-size: 0.56rem;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px var(--es-glow-b);
+  user-select: none;
+}
+
+@keyframes es-spin-cw { to { transform: rotate(360deg); } }
+@keyframes es-spin-ccw { to { transform: rotate(-360deg); } }
+
+@keyframes es-root-breathe {
+  0%, 100% { opacity: 0.78; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-5px); }
+}
+
+@keyframes es-halo-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.58; }
+  50% { transform: scale(1.08); opacity: 0.96; }
+}
+
+@keyframes es-ring-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.58; }
+  50% { transform: scale(1.08); opacity: 0.9; }
+}
+
+@keyframes es-core-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.55; }
+  50% { transform: scale(1.13); opacity: 0.92; }
+}
+
+@keyframes es-dot-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.45); }
+}

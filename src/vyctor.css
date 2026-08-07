@@ -1,0 +1,665 @@
+/* ── Vyctor Interface — Layout & Stili Rossi ─────────────────────────────────
+   Tutti gli stili per VyctorInterface.jsx.
+   Scoped sotto .vyctor-shell per isolare la palette rossa da Alma.
+   Le variabili --red, --bg, --text, --text-dim, --border, --surface
+   provengono dall'index.css globale.
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Shell ───────────────────────────────────────────── */
+
+.vyctor-shell {
+  --vy-accent:       #ff5c69;
+  --vy-accent-glow:  rgba(255, 92, 105, 0.36);
+  --vy-accent-dim:   rgba(255, 92, 105, 0.16);
+  --vy-surface:      rgba(255, 92, 105, 0.055);
+  --vy-border:       rgba(255, 92, 105, 0.22);
+  --vy-border-hover: rgba(255, 92, 105, 0.48);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  background:
+    radial-gradient(ellipse 70% 60% at 62% 50%, rgba(255, 92, 105, 0.11), transparent 65%),
+    linear-gradient(180deg, #180811 0%, #090c18 58%, #03060d 100%);
+}
+
+/* ── Entity — background assoluto ────────────────────── */
+
+.vyctor-bg-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.88;
+  filter: drop-shadow(0 0 56px var(--vy-accent-glow));
+}
+
+/* ── Dimensioni entità nel background ────────────────── */
+
+.vyctor-bg-layer .ve-svg {
+  width: min(340px, 44vh);
+  height: min(340px, 44vh);
+}
+
+/* ── History sidebar ─────────────────────────────────── */
+
+.vyctor-history-panel {
+  position: relative;
+  z-index: 2;
+  width: 270px;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(10, 4, 14, 0.92);
+  border-right: 1px solid rgba(255, 92, 105, 0.16);
+  padding: 22px 16px 16px;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+}
+
+/* ── Chat panel — minimale, trasparente ──────────────── */
+
+.vyctor-chat-panel {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 28px 16px;
+}
+
+.vyctor-chat-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 92, 105, 0.10);
+}
+
+/* ── Primary button (rosso) ──────────────────────────── */
+
+.vyctor-shell .primary-button {
+  background: rgba(255, 68, 85, 0.10);
+  border: 1px solid rgba(255, 68, 85, 0.38);
+  border-radius: 4px;
+  color: var(--vy-accent);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  padding: 9px 18px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+
+.vyctor-shell .primary-button:hover:not(:disabled) {
+  background: rgba(255, 68, 85, 0.18);
+  box-shadow: 0 0 12px var(--vy-accent-glow);
+}
+
+.vyctor-shell .primary-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+
+.vyctor-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.vyctor-panel-header h1 {
+  font-size: 1.05rem;
+  letter-spacing: 8px;
+  color: var(--vy-accent);
+  text-shadow: 0 0 16px var(--vy-accent-glow);
+  margin: 0;
+}
+
+.vyctor-shell .ghost-button {
+  background: transparent;
+  border: 1px solid var(--vy-border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.vyctor-shell .ghost-button:hover {
+  border-color: var(--vy-border-hover);
+  color: var(--text);
+}
+
+/* ── History list ────────────────────────────────────── */
+
+.vyctor-history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.vyctor-history-list::-webkit-scrollbar { width: 3px; }
+.vyctor-history-list::-webkit-scrollbar-track { background: transparent; }
+.vyctor-history-list::-webkit-scrollbar-thumb {
+  background: var(--vy-border);
+  border-radius: 2px;
+}
+
+.vyctor-history-item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: background 0.12s, border-color 0.12s;
+  width: 100%;
+}
+
+.vyctor-history-item:hover {
+  background: var(--vy-surface);
+  border-color: var(--vy-border);
+}
+
+.vyctor-history-item.is-active {
+  background: rgba(255, 68, 85, 0.07);
+  border-color: rgba(255, 68, 85, 0.28);
+}
+
+.vyctor-history-title {
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vyctor-history-item.is-active .vyctor-history-title {
+  color: var(--vy-accent);
+}
+
+.vyctor-history-date {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ── Diagnostics Vyctor ──────────────────────────────── */
+
+.vyctor-diag-panel {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--vy-border);
+}
+
+.vyctor-diag-title {
+  color: var(--red);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.vyctor-diag-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vyctor-diag-empty {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+}
+
+.vyctor-diag-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--vy-border);
+  border-radius: 4px;
+  background: var(--vy-surface);
+  color: var(--vy-accent);
+  font-size: 0.68rem;
+  padding: 3px 7px;
+}
+
+.vyctor-diag-item.is-ok {
+  border-color: rgba(0, 255, 136, 0.22);
+  color: var(--red);
+}
+
+.vyctor-diag-item.is-error {
+  border-color: rgba(255, 68, 85, 0.28);
+  color: var(--red);
+}
+
+/* ── Busy status dot (rosso) ─────────────────────────── */
+
+.vyctor-shell .status-dot.is-busy {
+  background: var(--vy-accent);
+  animation: pulse-busy-vyctor 1s ease infinite;
+}
+
+@keyframes pulse-busy-vyctor {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 68, 85, 0.45); }
+  50%       { box-shadow: 0 0 0 5px rgba(255, 68, 85, 0); }
+}
+
+/* ── Chat thread ─────────────────────────────────────── */
+
+.vyctor-thread {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 4px 0 14px;
+  min-height: 0;
+}
+
+.vyctor-thread::-webkit-scrollbar { width: 3px; }
+.vyctor-thread::-webkit-scrollbar-track { background: transparent; }
+.vyctor-thread::-webkit-scrollbar-thumb {
+  background: var(--vy-border);
+  border-radius: 2px;
+}
+
+/* ── Message bubbles Vyctor ──────────────────────────── */
+
+.vyctor-msg-row {
+  display: flex;
+  animation: fadeIn 0.2s ease;
+}
+
+.vyctor-msg-row.is-user {
+  justify-content: flex-end;
+}
+
+.vyctor-msg-row.is-assistant {
+  justify-content: flex-start;
+}
+
+.vyctor-bubble {
+  max-width: 78%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.vyctor-bubble.is-user {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vyctor-bubble.is-assistant {
+  background: var(--vy-surface);
+  border: 1px solid var(--vy-border);
+}
+
+.vyctor-msg-role {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+.vyctor-bubble.is-assistant .vyctor-msg-role {
+  color: var(--vy-accent);
+}
+
+.vyctor-bubble p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.vyctor-msg-time {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  opacity: 0.55;
+  align-self: flex-end;
+}
+
+/* ── Tool chips Vyctor ───────────────────────────────── */
+
+.vyctor-tool-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.vyctor-tool-chip {
+  border: 1px solid rgba(255, 68, 85, 0.22);
+  border-radius: 4px;
+  background: rgba(255, 68, 85, 0.07);
+  color: var(--vy-accent);
+  font-size: 0.68rem;
+  padding: 3px 7px;
+}
+
+/* ── Meta chips Vyctor ───────────────────────────────── */
+
+.vyctor-meta-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 0 4px;
+  flex-shrink: 0;
+}
+
+.vyctor-meta-chip {
+  background: rgba(255, 68, 85, 0.07);
+  border: 1px solid rgba(255, 68, 85, 0.22);
+  border-radius: 4px;
+  color: var(--vy-accent);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  padding: 3px 8px;
+}
+
+/* ── Action confirmation Vyctor ──────────────────────── */
+
+.vyctor-action-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid rgba(255, 68, 85, 0.28);
+  border-radius: 4px;
+  background: rgba(255, 68, 85, 0.06);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.vyctor-action-confirm p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.vyctor-confirm-title {
+  color: var(--vy-accent);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.vyctor-confirm-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ── Composer Vyctor ─────────────────────────────────── */
+
+.vyctor-composer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding-top: 14px;
+  border-top: 1px solid var(--vy-border);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.vyctor-composer-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vyctor-composer-field textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--vy-border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  resize: none;
+  min-height: 42px;
+  max-height: 140px;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.vyctor-composer-field textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.vyctor-composer-field textarea:focus {
+  border-color: rgba(255, 68, 85, 0.42);
+  box-shadow: 0 0 0 2px rgba(255, 68, 85, 0.09);
+}
+
+/* ── Bubble styles ───────────────────────────────────── */
+
+.vyctor-bubble {
+  background: rgba(19, 5, 15, 0.72);
+  border: 1px solid rgba(255, 92, 105, 0.22);
+  border-left: 3px solid rgba(255, 92, 105, 0.5);
+  border-radius: 4px;
+  box-shadow: inset 0 0 14px rgba(255, 92, 105, 0.03);
+  backdrop-filter: blur(8px);
+}
+
+.vyctor-bubble.is-user {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid rgba(255, 226, 231, 0.28);
+}
+
+.vyctor-panel-header h1 {
+  color: var(--vy-accent);
+  text-shadow: 0 0 18px var(--vy-accent-glow);
+}
+
+.vyctor-msg-role,
+.vyctor-msg-time,
+.vyctor-history-date,
+.status-subtitle {
+  text-transform: uppercase;
+}
+
+.vyctor-composer {
+  border-top-color: rgba(255, 92, 105, 0.14);
+}
+
+.vyctor-shell .primary-button,
+.vyctor-shell .ghost-button {
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* Alfred-pattern mission panel and sidebar overview */
+
+.vyctor-shell .alfred-goals-btn.vyctor-missions-btn {
+  background: rgba(255, 92, 105, 0.09) !important;
+  border-color: rgba(255, 92, 105, 0.40) !important;
+  color: var(--vy-accent) !important;
+  box-shadow: 0 0 10px rgba(255, 92, 105, 0.10) !important;
+}
+
+.vyctor-panoramica {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  background: rgba(255, 92, 105, 0.045);
+  border: 1px solid rgba(255, 92, 105, 0.2);
+  border-radius: 6px;
+  padding: 12px 6px;
+  color: inherit;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vyctor-panoramica:hover {
+  background: rgba(255, 92, 105, 0.09);
+  border-color: rgba(255, 92, 105, 0.36);
+  box-shadow: 0 0 14px rgba(255, 92, 105, 0.09);
+}
+
+.vyctor-pan-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.vyctor-pan-num {
+  color: var(--vy-accent);
+  font-size: 1.1rem;
+  text-shadow: 0 0 12px var(--vy-accent-glow);
+}
+
+.vyctor-pan-lbl {
+  color: var(--text-dim);
+  font-size: 0.58rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.vyctor-pan-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 92, 105, 0.18);
+}
+
+.vyctor-system-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.vyctor-metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(255, 92, 105, 0.055);
+  border: 1px solid rgba(255, 92, 105, 0.2);
+  border-radius: 4px;
+  padding: 7px 9px;
+}
+
+.vyctor-metric span {
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.vyctor-metric strong {
+  color: var(--vy-accent);
+  font-size: 0.76rem;
+  letter-spacing: 1px;
+}
+
+.vyctor-shell .ag-overlay {
+  background: rgba(16, 2, 8, 0.82);
+}
+
+.vyctor-shell .ag-modal {
+  background: rgba(28, 5, 14, 0.97);
+  border-color: rgba(255, 92, 105, 0.32);
+  box-shadow:
+    inset 0 0 40px rgba(255, 92, 105, 0.055),
+    0 0 60px rgba(128, 0, 28, 0.26);
+}
+
+.vyctor-shell .ag-modal::before {
+  background: linear-gradient(90deg, var(--vy-accent), transparent 50%, rgba(255, 92, 105, 0.15));
+  box-shadow: 0 0 14px rgba(255, 92, 105, 0.35);
+}
+
+.vyctor-shell .ag-modal-title,
+.vyctor-shell .ag-tab-btn.active,
+.vyctor-shell .ag-tab-summary,
+.vyctor-shell .ag-inline-message,
+.vyctor-shell .ag-cat-badge {
+  color: var(--vy-accent);
+  text-shadow: 0 0 14px rgba(255, 92, 105, 0.22);
+}
+
+.vyctor-shell .ag-tabs {
+  border-bottom-color: rgba(255, 92, 105, 0.18);
+}
+
+.vyctor-shell .ag-tab-btn,
+.vyctor-shell .ag-input,
+.vyctor-shell .ag-select,
+.vyctor-shell .ag-textarea,
+.vyctor-shell .ag-item,
+.vyctor-shell .ag-cat-badge {
+  border-color: rgba(255, 92, 105, 0.2);
+}
+
+.vyctor-shell .ag-tab-btn:hover,
+.vyctor-shell .ag-input:focus,
+.vyctor-shell .ag-select:focus,
+.vyctor-shell .ag-textarea:focus {
+  border-color: rgba(255, 92, 105, 0.4);
+}
+
+.vyctor-shell .ag-tab-btn.active {
+  background: rgba(255, 92, 105, 0.10);
+  border-color: rgba(255, 92, 105, 0.45);
+  box-shadow: 0 0 10px rgba(255, 92, 105, 0.12);
+}
+
+.vyctor-shell .ag-add-btn {
+  background: rgba(255, 92, 105, 0.10);
+  border-color: rgba(255, 92, 105, 0.36);
+  color: var(--vy-accent);
+}
+
+.vyctor-shell .ag-add-btn:hover {
+  background: rgba(255, 92, 105, 0.17);
+  box-shadow: 0 0 12px rgba(255, 92, 105, 0.18);
+}
+
+.vyctor-shell .ag-checkbox {
+  accent-color: var(--vy-accent);
+}
+
+.vyctor-shell .ag-error {
+  border-color: rgba(255, 68, 85, 0.4);
+}
+
+/* ── Eyebrow Vyctor (riusa atom globale, nessun override) */

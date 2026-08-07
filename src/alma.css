@@ -1,0 +1,1405 @@
+/* ── Alma Interface — Layout & Styles ────────────────────────────────────────
+   Tutti gli stili per AlmaInterface.jsx.
+   Scoped sotto .alma-app-shell per isolare i colori cyan da Vyctor.
+────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Shell ───────────────────────────────────────────── */
+
+.alma-app-shell {
+  --al-accent:       #39ff14;
+  --al-accent-glow:  rgba(57, 255, 20, 0.34);
+  --al-accent-dim:   rgba(57, 255, 20, 0.16);
+  --cyan:            #39ff14;
+  --cyan-dim:        rgba(57, 255, 20, 0.16);
+  --cyan-glow:       rgba(57, 255, 20, 0.34);
+  --border:          rgba(57, 255, 20, 0.20);
+  --border-hover:    rgba(57, 255, 20, 0.46);
+  --surface:         rgba(57, 255, 20, 0.055);
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  background:
+    radial-gradient(ellipse 70% 60% at 62% 50%, rgba(57, 255, 20, 0.09), transparent 65%),
+    linear-gradient(180deg, #061806 0%, #06110c 58%, #020802 100%);
+}
+
+/* ── Centro: colonna entity + chat ───────────────────── */
+
+.alma-center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ── Entity zone (in-flow, top of center) ────────────── */
+
+.alma-entity-zone {
+  flex-shrink: 0;
+  height: min(200px, 25vh);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0.92;
+  filter: drop-shadow(0 0 40px var(--al-accent-glow));
+  border-bottom: 1px solid rgba(57, 255, 20, 0.08);
+}
+
+.alma-entity-zone .ame-svg {
+  width: min(150px, 20vh);
+  height: min(150px, 20vh);
+}
+
+/* ── History sidebar ─────────────────────────────────── */
+
+.history-panel {
+  position: relative;
+  z-index: 2;
+  width: 250px;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(2, 12, 6, 0.92);
+  border-right: 1px solid rgba(57, 255, 20, 0.16);
+  padding: 22px 16px 16px;
+  overflow: hidden;
+  backdrop-filter: blur(14px);
+}
+
+/* ── Chat panel — minimale, trasparente ──────────────── */
+
+.chat-panel {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 24px 14px;
+}
+
+.alma-chat-status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-shrink: 0;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.10);
+}
+
+/* ── Shared neutral atoms ─────────────────────────────── */
+
+.eyebrow {
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.ghost-button {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.ghost-button:hover {
+  border-color: var(--border-hover);
+  color: var(--text);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Alma accent: primary-button (cyan) ──────────────── */
+
+.alma-app-shell .primary-button {
+  background: rgba(57, 255, 20, 0.10);
+  border: 1px solid rgba(57, 255, 20, 0.35);
+  border-radius: 4px;
+  color: var(--al-accent);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  padding: 9px 18px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, box-shadow 0.15s;
+  flex-shrink: 0;
+}
+
+.alma-app-shell .primary-button:hover:not(:disabled) {
+  background: rgba(57, 255, 20, 0.18);
+  box-shadow: 0 0 12px var(--al-accent-glow);
+}
+
+.alma-app-shell .primary-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.alma-app-shell .panel-header h1 {
+  font-size: 1.05rem;
+  letter-spacing: 8px;
+  color: var(--cyan);
+  text-shadow: 0 0 16px var(--cyan-glow);
+  margin: 0;
+}
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.history-list::-webkit-scrollbar { width: 3px; }
+.history-list::-webkit-scrollbar-track { background: transparent; }
+.history-list::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.history-item {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  transition: background 0.12s, border-color 0.12s;
+  width: 100%;
+}
+
+.history-item:hover {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+/* Alma accent: active session */
+.alma-app-shell .history-item.is-active {
+  background: rgba(57, 255, 20, 0.06);
+  border-color: rgba(57, 255, 20, 0.25);
+}
+
+.history-title {
+  font-size: 0.78rem;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.alma-app-shell .history-item.is-active .history-title {
+  color: var(--cyan);
+}
+
+.history-date {
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+/* ── Diagnostics extras (extend index.css) ───────────── */
+
+.diagnostics-item.is-ok {
+  border-color: rgba(0, 255, 136, 0.22);
+  color: var(--green);
+}
+
+/* Alma accent: busy dot */
+.alma-app-shell .status-dot.is-busy {
+  background: var(--cyan);
+  animation: pulse-busy-alma 1s ease infinite;
+}
+
+@keyframes pulse-busy-alma {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(57, 255, 20, 0.45); }
+  50%       { box-shadow: 0 0 0 5px rgba(57, 255, 20, 0); }
+}
+
+.status-label {
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  color: var(--text);
+}
+
+.status-subtitle {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* ── Chat thread ─────────────────────────────────────── */
+
+.chat-thread {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 4px 0 12px;
+}
+
+.chat-thread::-webkit-scrollbar { width: 3px; }
+.chat-thread::-webkit-scrollbar-track { background: transparent; }
+.chat-thread::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 2px;
+}
+
+/* ── Message bubbles ─────────────────────────────────── */
+
+.message-row {
+  display: flex;
+  animation: fadeIn 0.2s ease;
+}
+
+.message-row.is-user {
+  justify-content: flex-end;
+}
+
+.message-row.is-assistant {
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 78%;
+  padding: 11px 14px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.message-bubble.is-user {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Alma accent: assistant bubble */
+.alma-app-shell .message-bubble.is-assistant {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+
+.message-role {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+/* Alma accent: assistant role label */
+.alma-app-shell .message-bubble.is-assistant .message-role {
+  color: var(--cyan);
+}
+
+.message-bubble p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+.message-time {
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  opacity: 0.55;
+  align-self: flex-end;
+}
+
+/* ── Meta chips ──────────────────────────────────────── */
+
+.meta-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 0 4px;
+  flex-shrink: 0;
+}
+
+/* Alma accent: meta chip */
+.alma-app-shell .meta-chip {
+  background: rgba(57, 255, 20, 0.06);
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  border-radius: 4px;
+  color: var(--al-accent);
+  font-size: 0.62rem;
+  letter-spacing: 2px;
+  padding: 3px 8px;
+}
+
+/* ── Error banner ────────────────────────────────────── */
+
+.error-banner {
+  background: rgba(255, 68, 85, 0.06);
+  border: 1px solid rgba(255, 68, 85, 0.25);
+  border-radius: 4px;
+  color: var(--red);
+  font-size: 0.78rem;
+  padding: 10px 14px;
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+/* ── Composer ────────────────────────────────────────── */
+
+.composer {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  margin-top: 8px;
+}
+
+.composer-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.composer-field textarea {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  outline: none;
+  resize: none;
+  min-height: 42px;
+  max-height: 140px;
+  line-height: 1.5;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.composer-field textarea::placeholder {
+  color: var(--text-dim);
+}
+
+/* Alma accent: textarea focus */
+.alma-app-shell .composer-field textarea:focus {
+  border-color: rgba(57, 255, 20, 0.4);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.08);
+}
+
+/* Alma accent: override di .alma-tool-chip e .diagnostics-item (definiti in index.css
+   con rgba cyan hardcoded — sovrascriviamo solo border e background qui) */
+.alma-app-shell .alma-tool-chip {
+  border-color: rgba(57, 255, 20, 0.18);
+  background: rgba(57, 255, 20, 0.06);
+}
+
+.alma-app-shell .diagnostics-item {
+  border-color: rgba(57, 255, 20, 0.18);
+  background: rgba(57, 255, 20, 0.06);
+}
+
+/* ── Bubble e stili contenuto ────────────────────────── */
+
+.message-bubble {
+  background: rgba(1, 19, 10, 0.72);
+  border: 1px solid rgba(57, 255, 20, 0.20);
+  border-left: 3px solid rgba(57, 255, 20, 0.48);
+  border-radius: 4px;
+  box-shadow: inset 0 0 14px rgba(57, 255, 20, 0.03);
+  backdrop-filter: blur(8px);
+}
+
+.message-bubble.is-user {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-left: 3px solid rgba(221, 246, 255, 0.28);
+}
+
+.alma-app-shell .panel-header h1 {
+  color: var(--al-accent);
+  text-shadow: 0 0 18px var(--al-accent-glow);
+}
+
+.eyebrow,
+.message-role,
+.message-time,
+.history-date,
+.status-subtitle {
+  text-transform: uppercase;
+}
+
+.composer {
+  border-top-color: rgba(57, 255, 20, 0.14);
+}
+
+.alma-app-shell .primary-button,
+.ghost-button {
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* ── Alma growth/journaling extensions ───────────────── */
+
+.alma-entity-panel {
+  position: relative;
+  width: min(32vw, 420px);
+  min-width: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 18px;
+  border-left: 1px solid rgba(57, 255, 20, 0.12);
+}
+
+.alma-quick-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.alma-breathing-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--al-accent);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px var(--al-accent-glow);
+}
+
+.alma-breathing-label span {
+  font-size: 0.86rem;
+}
+
+.alma-breathing-label small {
+  color: rgba(200, 230, 245, 0.45);
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+}
+
+.alma-diary-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(2, 12, 8, 0.82);
+  backdrop-filter: blur(6px);
+}
+
+.alma-diary-modal {
+  width: min(760px, 94vw);
+  max-height: 84vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(3, 24, 14, 0.97);
+  border: 1px solid rgba(57, 255, 20, 0.32);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 38px rgba(57, 255, 20, 0.06),
+    0 0 58px rgba(25, 150, 20, 0.24);
+}
+
+.alma-diary-modal::before {
+  content: '';
+  height: 3px;
+  background: linear-gradient(90deg, var(--al-accent), transparent 55%, rgba(57, 255, 20, 0.16));
+  box-shadow: 0 0 16px var(--al-accent-glow);
+  flex-shrink: 0;
+}
+
+.alma-diary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.16);
+}
+
+.alma-diary-header h2 {
+  color: var(--al-accent);
+  font-size: 0.82rem;
+  letter-spacing: 5px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.alma-diary-compose {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.14);
+}
+
+.alma-diary-input,
+.alma-diary-select,
+.alma-diary-textarea {
+  background: rgba(1, 17, 9, 0.76);
+  border: 1px solid rgba(57, 255, 20, 0.22);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.82rem;
+  outline: none;
+  padding: 9px 12px;
+}
+
+.alma-diary-textarea {
+  grid-column: 1 / -1;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.alma-diary-compose .primary-button,
+.alma-diary-message {
+  grid-column: 1 / -1;
+}
+
+.alma-diary-message {
+  color: rgba(57, 255, 20, 0.76);
+  font-size: 0.68rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.alma-diary-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px 20px 20px;
+}
+
+.alma-diary-entry {
+  background: rgba(1, 17, 9, 0.58);
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  border-left: 3px solid rgba(57, 255, 20, 0.48);
+  border-radius: 5px;
+  padding: 11px 13px;
+}
+
+.alma-diary-entry-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(200, 230, 245, 0.42);
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.alma-diary-entry-meta strong {
+  color: var(--al-accent);
+}
+
+.alma-diary-entry h3 {
+  color: rgba(230, 255, 230, 0.92);
+  font-size: 0.86rem;
+  margin: 8px 0 4px;
+}
+
+.alma-diary-entry p {
+  color: rgba(200, 230, 245, 0.68);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 820px) {
+  .alma-layout {
+    flex-direction: column;
+  }
+
+  .alma-entity-panel {
+    width: 100%;
+    min-height: 260px;
+    border-left: none;
+    border-top: 1px solid rgba(57, 255, 20, 0.12);
+  }
+
+  .alma-diary-compose {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Alfred-pattern wellness panel, recolored for Alma */
+
+.alma-app-shell .alfred-goals-btn.alma-wellness-btn {
+  background: rgba(57, 255, 20, 0.09) !important;
+  border-color: rgba(57, 255, 20, 0.40) !important;
+  color: #39ff14 !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.10) !important;
+}
+
+.alma-panoramica {
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.alma-panoramica:hover {
+  border-color: rgba(57, 255, 20, 0.36);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.10);
+}
+
+.alma-app-shell .ag-overlay {
+  background: rgba(1, 16, 10, 0.82);
+}
+
+.alma-app-shell .ag-modal {
+  background: rgba(3, 24, 14, 0.97);
+  border-color: rgba(57, 255, 20, 0.32);
+  box-shadow:
+    inset 0 0 40px rgba(57, 255, 20, 0.055),
+    0 0 60px rgba(24, 130, 20, 0.26);
+}
+
+.alma-app-shell .ag-modal::before {
+  background: linear-gradient(90deg, #39ff14, transparent 50%, rgba(57, 255, 20, 0.15));
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.35);
+}
+
+.alma-app-shell .ag-modal-title,
+.alma-app-shell .ag-tab-btn.active,
+.alma-app-shell .ag-tab-summary,
+.alma-app-shell .ag-inline-message,
+.alma-app-shell .ag-diary-tag {
+  color: #39ff14;
+  text-shadow: 0 0 14px rgba(57, 255, 20, 0.24);
+}
+
+.alma-app-shell .ag-tabs {
+  border-bottom-color: rgba(57, 255, 20, 0.18);
+}
+
+.alma-app-shell .ag-tab-btn,
+.alma-app-shell .ag-input,
+.alma-app-shell .ag-textarea,
+.alma-app-shell .ag-tag-btn,
+.alma-app-shell .ag-diary-entry {
+  border-color: rgba(57, 255, 20, 0.18);
+}
+
+.alma-app-shell .ag-tab-btn:hover,
+.alma-app-shell .ag-input:focus,
+.alma-app-shell .ag-textarea:focus,
+.alma-app-shell .ag-tag-btn:hover {
+  border-color: rgba(57, 255, 20, 0.38);
+}
+
+.alma-app-shell .ag-tab-btn.active,
+.alma-app-shell .ag-tag-btn.active {
+  background: rgba(57, 255, 20, 0.10);
+  border-color: rgba(57, 255, 20, 0.45);
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.12);
+}
+
+.alma-app-shell .ag-modal-body::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.22);
+}
+
+.alma-app-shell .ag-add-btn {
+  background: rgba(57, 255, 20, 0.10);
+  border-color: rgba(57, 255, 20, 0.36);
+  color: #39ff14;
+}
+
+.alma-app-shell .ag-add-btn:hover {
+  background: rgba(57, 255, 20, 0.17);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.18);
+}
+
+.alma-app-shell .ag-diary-tag {
+  border-color: rgba(57, 255, 20, 0.34);
+}
+
+.alma-breath-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(1, 17, 9, 0.58);
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  border-radius: 5px;
+  padding: 18px;
+}
+
+.alma-breath-state {
+  color: #39ff14;
+  font-size: 1.1rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(57, 255, 20, 0.28);
+}
+
+.alma-breath-card p {
+  color: rgba(200, 230, 245, 0.7);
+  font-size: 0.86rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.alma-meditation-stop {
+  margin-top: 8px;
+  color: var(--al-accent);
+  border-color: rgba(57, 255, 20, 0.38);
+  background: rgba(57, 255, 20, 0.08);
+}
+
+.alma-meditation-guide {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--al-accent);
+  letter-spacing: 4px;
+  pointer-events: none;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px var(--al-accent-glow);
+  transform: translateX(-50%);
+}
+
+.alma-meditation-guide span {
+  font-size: 0.92rem;
+}
+
+.alma-meditation-guide small {
+  color: rgba(200, 230, 245, 0.48);
+  font-size: 0.58rem;
+  letter-spacing: 2px;
+}
+
+.alma-meditation-guide .alma-meditation-stop {
+  pointer-events: auto;
+}
+
+.alma-wellness-panel .ag-modal-title {
+  letter-spacing: 5px;
+}
+
+@media (max-width: 820px) {
+  .alma-meditation-guide {
+    bottom: 18px;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AlmaBreathingSession — schermata selezione / sessione / fine
+   Classi scoped .alma-bs-*
+══════════════════════════════════════════════════════════════ */
+
+/* ── Overlay principale ──────────────────────────────────── */
+
+.alma-bs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(2, 12, 6, 0.84);
+  backdrop-filter: blur(6px);
+  animation: alma-bs-fadein 0.25s ease;
+}
+
+/* In modalità sessione attiva: trasparente, lascia vedere l'entità */
+.alma-bs-overlay.is-active-mode {
+  background: transparent;
+  backdrop-filter: none;
+}
+
+/* ── Modal condiviso (selezione + fine) ─────────────────── */
+
+.alma-bs-modal {
+  width: min(540px, 94vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgba(3, 24, 14, 0.97);
+  border: 1px solid rgba(57, 255, 20, 0.32);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 0 38px rgba(57, 255, 20, 0.06),
+    0 0 58px rgba(25, 150, 20, 0.24);
+  animation: alma-bs-fadein 0.3s ease;
+}
+
+.alma-bs-modal::before {
+  content: '';
+  height: 3px;
+  background: linear-gradient(90deg, #39ff14, transparent 55%, rgba(57, 255, 20, 0.16));
+  box-shadow: 0 0 16px rgba(57, 255, 20, 0.35);
+  flex-shrink: 0;
+}
+
+/* ── Header del modal ────────────────────────────────────── */
+
+.alma-bs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.16);
+  flex-shrink: 0;
+}
+
+.alma-bs-title {
+  color: #39ff14;
+  font-size: 0.82rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 14px rgba(57, 255, 20, 0.24);
+}
+
+/* ── Body scrollabile ────────────────────────────────────── */
+
+.alma-bs-body {
+  overflow-y: auto;
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.alma-bs-body::-webkit-scrollbar { width: 3px; }
+.alma-bs-body::-webkit-scrollbar-track { background: transparent; }
+.alma-bs-body::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.22);
+  border-radius: 2px;
+}
+
+.alma-bs-section-label {
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: rgba(200, 230, 245, 0.38);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* ── Card esercizio ──────────────────────────────────────── */
+
+.alma-bs-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.alma-bs-card {
+  background: rgba(1, 17, 9, 0.58);
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  border-radius: 6px;
+  padding: 13px 15px 11px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.alma-bs-card:hover {
+  background: rgba(57, 255, 20, 0.04);
+  border-color: rgba(57, 255, 20, 0.28);
+}
+
+.alma-bs-card.is-selected {
+  background: rgba(57, 255, 20, 0.07);
+  border-color: rgba(57, 255, 20, 0.50);
+  box-shadow: 0 0 14px rgba(57, 255, 20, 0.09);
+}
+
+.alma-bs-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.alma-bs-card-title {
+  color: rgba(220, 255, 220, 0.88);
+  font-size: 0.84rem;
+  letter-spacing: 1px;
+}
+
+.alma-bs-card.is-selected .alma-bs-card-title {
+  color: #39ff14;
+}
+
+.alma-bs-card-rhythm {
+  color: rgba(57, 255, 20, 0.55);
+  font-size: 0.66rem;
+  letter-spacing: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.alma-bs-card.is-selected .alma-bs-card-rhythm {
+  color: rgba(57, 255, 20, 0.82);
+}
+
+.alma-bs-card-desc {
+  color: rgba(200, 230, 245, 0.5);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+/* ── Anteprima ritmo (barre proporzionali) ───────────────── */
+
+.alma-bs-preview {
+  display: flex;
+  height: 4px;
+  gap: 2px;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 6px;
+  opacity: 0.55;
+}
+
+.alma-bs-card.is-selected .alma-bs-preview {
+  opacity: 1;
+}
+
+.alma-bs-preview-bar { height: 100%; border-radius: 1px; }
+.alma-bs-preview-bar.is-inhale   { background: #39ff14; opacity: 0.9; }
+.alma-bs-preview-bar.is-hold     { background: #39ff14; opacity: 0.55; }
+.alma-bs-preview-bar.is-exhale   { background: #39ff14; opacity: 0.35; }
+.alma-bs-preview-bar.is-hold-out { background: #39ff14; opacity: 0.18; }
+
+/* ── Selettore durata ────────────────────────────────────── */
+
+.alma-bs-dur-row {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.alma-bs-dur-btn {
+  background: rgba(1, 17, 9, 0.55);
+  border: 1px solid rgba(57, 255, 20, 0.16);
+  border-radius: 4px;
+  color: rgba(200, 230, 245, 0.55);
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  padding: 8px 18px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+}
+
+.alma-bs-dur-btn:hover {
+  border-color: rgba(57, 255, 20, 0.34);
+  color: rgba(220, 255, 220, 0.85);
+}
+
+.alma-bs-dur-btn.is-selected {
+  background: rgba(57, 255, 20, 0.10);
+  border-color: rgba(57, 255, 20, 0.52);
+  color: #39ff14;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.12);
+}
+
+.alma-bs-start-btn {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+/* ── Sessione attiva ─────────────────────────────────────── */
+
+.alma-bs-active {
+  position: absolute;
+  inset: 0;
+  animation: alma-bs-fadein 0.4s ease;
+}
+
+/* Barra sottile in cima che si svuota con il passare del tempo */
+.alma-bs-progress-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(57, 255, 20, 0.10);
+}
+
+.alma-bs-progress-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #39ff14, rgba(57, 255, 20, 0.45));
+  transform-origin: left center;
+  transition: transform 1s linear;
+  box-shadow: 0 0 6px rgba(57, 255, 20, 0.5);
+}
+
+/* Countdown discreto angolo in alto a destra */
+.alma-bs-remaining {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  color: rgba(57, 255, 20, 0.48);
+  font-size: 0.68rem;
+  letter-spacing: 3px;
+}
+
+/* Etichetta fase — posizionata sotto il centro (come il vecchio guide) */
+.alma-bs-phase-area {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  pointer-events: none;
+  text-align: center;
+}
+
+.alma-bs-phase-label {
+  color: #39ff14;
+  font-size: 1.15rem;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  text-shadow: 0 0 26px rgba(57, 255, 20, 0.55);
+  white-space: nowrap;
+  animation: alma-bs-fadein 0.22s ease;
+}
+
+.alma-bs-phase-hint {
+  color: rgba(200, 230, 245, 0.38);
+  font-size: 0.57rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+/* Pulsante Stop in basso al centro */
+.alma-bs-stop-btn {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: rgba(57, 255, 20, 0.65) !important;
+  border-color: rgba(57, 255, 20, 0.26) !important;
+  background: rgba(57, 255, 20, 0.05) !important;
+}
+
+.alma-bs-stop-btn:hover {
+  color: #39ff14 !important;
+  border-color: rgba(57, 255, 20, 0.48) !important;
+  background: rgba(57, 255, 20, 0.10) !important;
+}
+
+/* ── Schermata fine ──────────────────────────────────────── */
+
+.alma-bs-done-modal {
+  max-width: 360px;
+}
+
+.alma-bs-done-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 44px 28px;
+  text-align: center;
+}
+
+.alma-bs-done-icon {
+  font-size: 2rem;
+  color: rgba(57, 255, 20, 0.55);
+  text-shadow: 0 0 24px rgba(57, 255, 20, 0.35);
+  animation: alma-bs-fadein 0.5s ease;
+}
+
+.alma-bs-done-title {
+  color: #39ff14;
+  font-size: 0.88rem;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-shadow: 0 0 18px rgba(57, 255, 20, 0.30);
+}
+
+.alma-bs-done-msg {
+  color: rgba(200, 230, 245, 0.6);
+  font-size: 0.86rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ── Animazione condivisa ────────────────────────────────── */
+
+@keyframes alma-bs-fadein {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+@media (max-width: 600px) {
+  .alma-bs-phase-area { bottom: 22%; }
+  .alma-bs-stop-btn   { bottom: 10%; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Pannello Diario Rapido (colonna destra)
+   Classi scoped .alma-diary-panel-*
+══════════════════════════════════════════════════════════════ */
+
+.alma-diary-panel {
+  width: 268px;
+  flex-shrink: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: rgba(2, 12, 6, 0.92);
+  border-left: 1px solid rgba(57, 255, 20, 0.16);
+  backdrop-filter: blur(14px);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.alma-diary-panel-header {
+  padding: 18px 16px 10px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alma-diary-panel-title {
+  font-size: 0.6rem;
+  letter-spacing: 5px;
+  color: var(--al-accent);
+  text-transform: uppercase;
+  text-shadow: 0 0 12px var(--al-accent-glow);
+}
+
+.alma-diary-panel-count {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+/* ── Quick compose area ───────────────────────────── */
+
+.alma-diary-quick-compose {
+  flex-shrink: 0;
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(57, 255, 20, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alma-diary-emotions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.alma-diary-emo-btn {
+  background: transparent;
+  border: 1px solid rgba(57, 255, 20, 0.15);
+  border-radius: 3px;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  padding: 3px 7px;
+  cursor: pointer;
+  font-family: inherit;
+  text-transform: uppercase;
+  transition: border-color 0.14s, color 0.14s, background 0.14s;
+}
+
+.alma-diary-emo-btn:hover {
+  border-color: rgba(57, 255, 20, 0.32);
+  color: var(--text);
+}
+
+.alma-diary-emo-btn.active {
+  background: rgba(57, 255, 20, 0.09);
+  border-color: rgba(57, 255, 20, 0.48);
+  color: var(--al-accent);
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.10);
+}
+
+.alma-diary-quick-textarea {
+  width: 100%;
+  background: rgba(1, 17, 9, 0.72);
+  border: 1px solid rgba(57, 255, 20, 0.18);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  outline: none;
+  padding: 9px 11px;
+  resize: none;
+  min-height: 80px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.alma-diary-quick-textarea::placeholder {
+  color: var(--text-dim);
+}
+
+.alma-diary-quick-textarea:focus {
+  border-color: rgba(57, 255, 20, 0.40);
+  box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.07);
+}
+
+.alma-diary-quick-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.alma-diary-saved-msg {
+  font-size: 0.64rem;
+  letter-spacing: 2px;
+  color: var(--al-accent);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+.alma-diary-ctrl-hint {
+  font-size: 0.58rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  opacity: 0.55;
+}
+
+/* ── Entries list ─────────────────────────────────── */
+
+.alma-diary-panel-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px 14px;
+}
+
+.alma-diary-panel-list::-webkit-scrollbar { width: 3px; }
+.alma-diary-panel-list::-webkit-scrollbar-track { background: transparent; }
+.alma-diary-panel-list::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.18);
+  border-radius: 2px;
+}
+
+.alma-diary-panel-empty {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-align: center;
+  padding: 20px 0;
+  opacity: 0.55;
+}
+
+.alma-diary-panel-entry {
+  background: rgba(1, 17, 9, 0.55);
+  border: 1px solid rgba(57, 255, 20, 0.14);
+  border-left: 2px solid rgba(57, 255, 20, 0.38);
+  border-radius: 4px;
+  padding: 9px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.alma-diary-panel-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6rem;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+.alma-diary-panel-tag {
+  color: var(--al-accent);
+  opacity: 0.75;
+  font-size: 0.58rem;
+}
+
+.alma-diary-panel-entry-title {
+  color: rgba(220, 255, 220, 0.88);
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+.alma-diary-panel-entry-text {
+  color: rgba(200, 230, 245, 0.62);
+  font-size: 0.78rem;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
